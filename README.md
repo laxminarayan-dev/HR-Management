@@ -4,10 +4,10 @@
     1) <></> //bad practice
     2) <Fragment>
     3) All Html element
-Note: return only return single element
+<br/> <h3>Note: return only return single element</h3>
 
 2)  expression 
-    {} // number.string,boolean,opration,element,component,object,array,variable,function
+    1) {} // number.string,boolean,opration,element,component,object,array,variable,function
 
 3) css in react
     1) inline
@@ -18,18 +18,18 @@ Note: return only return single element
     1) npm i react-router-dom
     2) import
 
-<br> <h3>Note : replace class - className</h3>
+<br/> <h3>Note : replace class - className</h3>
 
 
 <h1>Date: 10/07/2025</h1>
 
-1) Git,Github
+1) Git, Github
     1) About Git:
         1) tracking changes source data
         2) open-source
         3) distributed version control
     2) git command list
-        <br> <h3>Note: local project name and repo must have same name</h3>
+        <br/> <h3>Note: local project name and repo must have same name</h3>
         1) git init
         2) git login and create repo
         3) git remote -v               //check connection
@@ -40,7 +40,7 @@ Note: return only return single element
         8) git push -u origin main
         9) git clone <path>
 
-<br> <h3>link : https://github.com/shashipandey100192/modelprojectvip</h3>
+<br/> <h3>link : https://github.com/shashipandey100192/modelprojectvip</h3>
 
 2) react-icon
     1) npm i react-icon
