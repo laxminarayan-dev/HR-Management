@@ -2,7 +2,7 @@
 
 1) Wrap element
     1) <></> //bad practice
-    2) <Fragment>
+    2) Fragment
     3) All Html element
 <br/> <h3>Note: return only return single element</h3>
 
