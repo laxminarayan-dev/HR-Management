@@ -1,4 +1,4 @@
-Date 9/07/2025
+<h1>Date: 09/07/2025</h1>
 --------------
 
 1) Wrap element
@@ -22,9 +22,9 @@ Note: return only return single element
 Note : replace class - className
 
 ----------------------------------------
-<h1>
-Date : 10-07-2025
-</h1>
+
+<h1>Date: 10/07/2025</h1>
+-------------------------
 
 1) Git,Github
     1) About Git:
@@ -43,15 +43,20 @@ Date : 10-07-2025
         8) git push -u origin main
         9) git clone <path>
 
-https://github.com/shashipandey100192/modelprojectvip
+link : https://github.com/shashipandey100192/modelprojectvip
 
 2) react-icon
-    npm i react-icon
-    import perticular icon
-    inject
+    1) npm i react-icon
+    2) import perticular icon
+    3) inject
 3) type of page
     1) full page (have multiple comp)
-        landing, dashborad, home
+        1) landing
+        2) dashborad
+        3) home
     2) blank page (have single comp) 
-        login,register,error,forgot
+        1) login
+        2) register
+        3) error
+        4) forgot
     
