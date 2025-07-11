@@ -18,7 +18,7 @@ Note: return only return single element
     1) npm i react-router-dom
     2) import
 
-Note : replace class - className
+<br> <h3>Note : replace class - className</h3>
 
 
 <h1>Date: 10/07/2025</h1>
@@ -29,7 +29,7 @@ Note : replace class - className
         2) open-source
         3) distributed version control
     2) git command list
-        Note: local project name and repo must have same name
+        <br> <h3>Note: local project name and repo must have same name</h3>
         1) git init
         2) git login and create repo
         3) git remote -v               //check connection
@@ -40,7 +40,7 @@ Note : replace class - className
         8) git push -u origin main
         9) git clone <path>
 
-link : https://github.com/shashipandey100192/modelprojectvip
+<br> <h3>link : https://github.com/shashipandey100192/modelprojectvip</h3>
 
 2) react-icon
     1) npm i react-icon
