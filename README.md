@@ -22,7 +22,9 @@ Note: return only return single element
 Note : replace class - className
 
 ----------------------------------------
+<h1>
 Date : 10-07-2025
+</h1>
 
 1) Git,Github
     1) About Git:
@@ -45,4 +47,11 @@ https://github.com/shashipandey100192/modelprojectvip
 
 2) react-icon
     npm i react-icon
+    import perticular icon
+    inject
+3) type of page
+    1) full page (have multiple comp)
+        landing, dashborad, home
+    2) blank page (have single comp) 
+        login,register,error,forgot
     
