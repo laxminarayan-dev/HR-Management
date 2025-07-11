@@ -1,5 +1,4 @@
 <h1>Date: 09/07/2025</h1>
---------------
 
 1) Wrap element
     1) <></> //bad practice
@@ -21,10 +20,8 @@ Note: return only return single element
 
 Note : replace class - className
 
-----------------------------------------
 
 <h1>Date: 10/07/2025</h1>
--------------------------
 
 1) Git,Github
     1) About Git:
