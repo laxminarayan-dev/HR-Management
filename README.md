@@ -40,3 +40,9 @@ Date : 10-07-2025
         7) git pull origin main
         8) git push -u origin main
         9) git clone <path>
+
+https://github.com/shashipandey100192/modelprojectvip
+
+2) react-icon
+    npm i react-icon
+    
