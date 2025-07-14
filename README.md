@@ -1,3 +1,5 @@
+## React Course Info
+
 <h1>Date: 09/07/2025</h1>
 
 1. Wrap element 1) <></> //bad practice 2) Fragment 3) All Html element
@@ -70,3 +72,6 @@
       1. can't define inside a function
       2. can't define inside a loop
       3. can't define in bottom of function
+3. useState()
+   1. used for re-render / update template or DOM (without refresh)
+   2.
