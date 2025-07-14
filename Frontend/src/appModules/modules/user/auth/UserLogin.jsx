@@ -66,7 +66,7 @@ const UserLogin = () => {
             value="Submit"
           />
           <hr />
-          <Link to="/userRegister" className="underline text-sm">
+          <Link to="/user/register" className="underline text-sm">
             Register
           </Link>
         </div>

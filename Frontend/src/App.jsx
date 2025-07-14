@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import UserLogin from "./appModules/modules/user/auth/UserLogin";
 import UserRegister from "./appModules/modules/user/auth/UserRegister";
-import UserHome from "./appModules/modules/user/UserHome";
+import UserWelcome from "./appModules/modules/user/UserWelcome";
 
 import AdminHome from "./appModules/modules/admin/AdminHome";
 import AdminLogin from "./appModules/modules/admin/auth/AdminLogin";
@@ -17,13 +17,14 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/userLogin" element={<UserLogin />}></Route>
-        <Route path="/userRegister" element={<UserRegister />}></Route>
-        <Route path="/userHome" element={<UserHome />}></Route>
-        <Route path="/adminHome" element={<AdminHome />}></Route>
-        <Route path="/adminLogin" element={<AdminLogin />}></Route>
-
-        <Route path="/adminRegister" element={<AdminRegister />}></Route>
+        <Route path="/user" element={<UserWelcome />}>
+          <Route path="login" element={<UserLogin />}></Route>
+          <Route path="register" element={<UserRegister />}></Route>
+        </Route>
+        <Route path="/admin" element={<AdminHome />}>
+          <Route path="login" element={<AdminLogin />}></Route>
+          <Route path="register" element={<AdminRegister />}></Route>
+        </Route>
       </Routes>
     </Fragment>
   );

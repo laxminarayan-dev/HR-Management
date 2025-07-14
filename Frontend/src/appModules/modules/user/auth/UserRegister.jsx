@@ -98,7 +98,7 @@ const UserRegister = () => {
             type="submit"
             value="Submit"
           />
-          <Link to="/userLogin" className="underline text-sm">
+          <Link to="/user/login" className="underline text-sm">
             Login
           </Link>
         </div>
