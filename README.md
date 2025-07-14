@@ -74,4 +74,3 @@
       3. can't define in bottom of function
 3. useState()
    1. used for re-render / update template or DOM (without refresh)
-   2.
