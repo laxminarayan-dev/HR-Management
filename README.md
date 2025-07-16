@@ -74,3 +74,35 @@
       3. can't define in bottom of function
 3. useState()
    1. used for re-render / update template or DOM (without refresh)
+
+## MongoDB (database)
+
+<h1>Date: 15/07/2025</h1>
+
+1. mongodb plateform
+
+   1. mongodb community edition (local) // download and install
+   2. mongodb enterprise (Advance)
+   3. mongodb Atlas (cloud DB)
+
+2. mongodb tool
+
+   1. mongodb compass (GUI) // download and install
+   2. mongodb shell (CLI) // download and paste in c drive
+
+<h1>Date: 16/07/2025</h1>
+
+<h3> mongodb atlas (cloud) </h3>
+
+1. Login and Signup
+2. create company or organization
+3. create project
+4. create db
+5. create cluster
+6. database access
+7. network access (add IP ) (0.0.0.0/0 for all)
+8. connect atlas to mongodb compass
+
+## NodeJS
+
+1.

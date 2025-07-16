@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
-  { name: "User", href: "/userLogin", current: false },
-  { name: "Admin", href: "/adminLogin", current: false },
+  { name: "User", href: "/user/login", current: false },
+  { name: "Admin", href: "/admin/login", current: false },
   { name: "About", href: "#", current: false },
 ];
 
