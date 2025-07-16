@@ -7,6 +7,7 @@ app.use(cors())
 
 app.get("/api/",(req,res)=>{
     res.status(200).send(http.STATUS_CODES)
+    res.end()
 })
 
 

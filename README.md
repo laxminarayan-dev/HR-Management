@@ -242,3 +242,21 @@
    "511": "Network Authentication Required"
    <br/>
    }
+
+3. createServer()
+
+4. listern()
+
+5. http (package,module) // work on network
+
+6. end() //end of req
+
+7. write() // write data on web page
+
+8. express
+
+9. cors
+
+10. mongoose
+
+11. dotenv
