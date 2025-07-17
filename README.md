@@ -260,3 +260,33 @@
 10. mongoose
 
 11. dotenv
+
+<h1> Date: 17/07/2025 </h1>
+
+1. express install
+
+   1. install
+   1. npm i express
+   1. npm i express --save
+   1. import/require
+   1. express routing
+
+2. nodemon
+
+   1. about nodemon: auto restart server
+   2. npm i nodemon
+   3. config (package.json) //after start
+
+note : use "run" for custom command
+
+3. dotenv
+
+   1. npm i dotenv
+   2. create file name must have ".env"
+   3. config in server file // require("dotenv").config()
+   4. access varibale
+
+4. cors (Cross-Origin Resource Sharing)
+   1. npm i cors
+   2. import/require (in server file only)
+   3. inject // (app.use(cors()))

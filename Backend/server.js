@@ -2,16 +2,21 @@ const express = require("express")
 const app = express();
 const PORT = 8000 || process.env.PORT
 const cors = require("cors")
-const http = require("http")
-app.use(cors())
+const dbConnection = require("./db/dbConnection")
+const route = require("./routes/route")
 
-app.get("/api/",(req,res)=>{
-    res.status(200).send(http.STATUS_CODES)
-    res.end()
-})
+// middlewares
+app.use(cors()) // cross origin resource share
+app.use(express.json()) // data only accessible in json format not any other 
 
+// database connection
+dbConnection()
 
-app.listen(PORT,()=>{
+// route
+app.use("/", route);
+
+// listen
+app.listen(PORT, () => {
     console.log(`
 ==============================
 server running on port ${PORT}
