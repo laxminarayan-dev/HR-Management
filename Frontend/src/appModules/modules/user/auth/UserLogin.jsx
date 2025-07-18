@@ -1,8 +1,15 @@
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+0.0;
 import { useState } from "react";
 import { Link } from "react-router-dom";
 const UserLogin = () => {
   const [passwordState, setPasswordState] = useState(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    console.log(data);
+  };
   return (
     <div
       className="flex justify-center items-center w-full min-h-[calc(100dvh-48px)] bg-no-repeat bg-cover bg-center"
@@ -16,6 +23,7 @@ const UserLogin = () => {
         <form
           action="#"
           className="flex flex-col justify-center items-start gap-5 h-80 px-10 "
+          onSubmit={handleSubmit}
         >
           <div className="text-center w-full">
             <h1 className="text-3xl font-bold">Welcome Back</h1>
@@ -26,20 +34,22 @@ const UserLogin = () => {
           <div className="w-full flex flex-col justify-center items-start gap-1">
             <label
               className="text-xs flex justify-center items-center gap-2"
-              htmlFor=""
+              htmlFor="email"
             >
               <Mail size={18} /> Your Email Address
             </label>
             <input
               className="focus:outline-0 w-full border border-slate-300 rounded-lg px-2 py-1"
               type="email"
+              id="email"
               placeholder="Enter Email Address"
+              name="email"
             />
           </div>
           <div className="w-full flex flex-col justify-center items-start gap-1">
             <label
               className="text-xs flex justify-center items-center gap-2"
-              htmlFor=""
+              htmlFor="pass"
             >
               <Lock size={18} /> Password
             </label>
@@ -50,6 +60,8 @@ const UserLogin = () => {
                 placeholder={
                   passwordState ? "*****************" : "Enter Password"
                 }
+                id="pass"
+                name="password"
               />
               <button
                 type="button"
