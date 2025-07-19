@@ -1,7 +1,10 @@
 import { Fragment, useEffect } from "react";
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
-  const [selectedLink, setSelectedLink] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedLink, setSelectedLink] = useState("/");
   const links = [
     { name: "Dashboard", path: "/" },
     { name: "Employees", path: "/employees" },
@@ -11,12 +14,13 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     { name: "Logout", path: "/logout" },
   ];
   useEffect(() => {
-    const currentPath = window.location.pathname;
+    const currentPath = location.pathname;
     const currentLink = links.find((link) => link.path === currentPath);
     if (currentLink) {
       setSelectedLink(currentLink.name.toLowerCase());
+      setIsSidebarOpen(false);
     }
-  }, []);
+  }, [location.pathname]);
   return (
     <Fragment>
       <div
@@ -38,7 +42,8 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
               <li key={index}>
                 <button
                   onClick={() => {
-                    setSelectedLink(link.name.toLowerCase());
+                    setSelectedLink(link.path);
+                    navigate(link.path);
                     setIsSidebarOpen(false);
                   }}
                   className={`w-full text-left block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-slate-900 hover:text-slate-100 ${
