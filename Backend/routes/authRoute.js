@@ -4,23 +4,25 @@ const userModel = require("../models/userModel")
 
 function generateUserId() {
     const prefix = "USR";
-    const timestamp = Date.now().toString(36); // base36 includes 0-9 + a-z
-    const randomPart = timestamp.slice(-5).toUpperCase(); // last 5 characters
-
+    const timestamp = Date.now().toString(36);
+    const randomPart = timestamp.slice(-5).toUpperCase();
     return prefix + randomPart;
 }
 
 
 route.post("/login", async (req, res) => {
+    const { email, password } = req.body;
     try {
-        const user = await userModel.findOne({ email: req.body.email })
-        if (user == null) {
+        const user = await userModel.findOne({ email: email })
+        console.log("user:", user);
+
+        if (user == null || user.length === 0) {
             res.status(404).json({
                 "message": "no user found"
             })
         }
         else {
-            if (req.body.password == user.password) {
+            if (password == user.password) {
                 res.status(200).json({
                     "message": "login successfull"
                 })
