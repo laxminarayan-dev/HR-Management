@@ -4,6 +4,34 @@ import { Link } from "react-router-dom";
 
 const UserRegister = () => {
   const [passwordState, setPasswordState] = useState(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    if (data.password === data.confPassword) {
+      console.log(data);
+      fetch("http://localhost:8000/api/auth/register", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then(async (res) => {
+          let resp = await res.json();
+          if (resp.ok) {
+            console.log(resp.message);
+          } else {
+            console.log(resp.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("password not match");
+    }
+  };
   return (
     <div
       className="w-full min-h-[calc(100dvh-48px)] flex justify-center items-center bg-no-repeat bg-center bg-cover"
@@ -15,6 +43,7 @@ const UserRegister = () => {
       >
         <form
           action="#"
+          onSubmit={handleSubmit}
           className="flex flex-col justify-center items-start gap-5 px-10 "
         >
           <div className="text-center w-full">
@@ -27,41 +56,32 @@ const UserRegister = () => {
           <div className="w-full flex flex-col justify-center items-start gap-1">
             <label
               className="text-xs flex justify-center items-center gap-2"
-              htmlFor=""
+              htmlFor="name"
             >
               <User size={18} /> Your Name
             </label>
             <input
               className="focus:outline-0 w-full border border-slate-300 rounded-lg px-2 py-1"
-              type="email"
-              placeholder="Enter Email Address"
+              type="name"
+              name="name"
+              id="name"
+              placeholder="Enter Full Name"
             />
           </div>
-          {/* Username */}
-          <div className="w-full flex flex-col justify-center items-start gap-1">
-            <label
-              className="text-xs flex justify-center items-center gap-2"
-              htmlFor=""
-            >
-              <Pen size={18} /> Create Username
-            </label>
-            <input
-              className="focus:outline-0 w-full border border-slate-300 rounded-lg px-2 py-1"
-              type="email"
-              placeholder="Enter Email Address"
-            />
-          </div>
+
           {/* Email */}
           <div className="w-full flex flex-col justify-center items-start gap-1">
             <label
               className="text-xs flex justify-center items-center gap-2"
-              htmlFor=""
+              htmlFor="email"
             >
               <Mail size={18} /> Your Email Address
             </label>
             <input
               className="focus:outline-0 w-full border border-slate-300 rounded-lg px-2 py-1"
               type="email"
+              id="email"
+              name="email"
               placeholder="Enter Email Address"
             />
           </div>
@@ -69,12 +89,14 @@ const UserRegister = () => {
           <div className="w-full flex flex-col justify-center items-start gap-1">
             <label
               className="text-xs flex justify-center items-center gap-2"
-              htmlFor=""
+              htmlFor="password"
             >
               <Lock size={18} /> Password
             </label>
             <div className=" w-full border border-slate-300 rounded-lg px-2 py-1 flex justify-between">
               <input
+                name="password"
+                id="password"
                 className="focus:outline-0 flex-1"
                 type={passwordState ? "password" : "text"}
                 placeholder={
@@ -89,6 +111,23 @@ const UserRegister = () => {
               >
                 {passwordState ? <Eye /> : <EyeOff />}
               </button>
+            </div>
+          </div>
+          <div className="w-full flex flex-col justify-center items-start gap-1">
+            <label
+              className="text-xs flex justify-center items-center gap-2"
+              htmlFor="confPassword"
+            >
+              <Lock size={18} /> Confirm Password
+            </label>
+            <div className=" w-full border border-slate-300 rounded-lg px-2 py-1 flex justify-between">
+              <input
+                className="focus:outline-0 flex-1"
+                type={"text"}
+                placeholder={"Confirm Password"}
+                name="confPassword"
+                id="confPassword"
+              />
             </div>
           </div>
 

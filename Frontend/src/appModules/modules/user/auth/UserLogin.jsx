@@ -4,11 +4,31 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 const UserLogin = () => {
   const [passwordState, setPasswordState] = useState(true);
+  const [response, setResponse] = useState(null);
   const handleSubmit = (e) => {
     e.preventDefault();
     let formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
     console.log(data);
+
+    fetch("http://localhost:8000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then(async (res) => {
+        let resp = await res.json();
+        console.log(resp);
+
+        if (res.ok) {
+          setResponse(resp.message);
+        } else {
+          setResponse(resp.message);
+        }
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <div
@@ -73,6 +93,7 @@ const UserLogin = () => {
                 {!passwordState ? <Eye /> : <EyeOff />}
               </button>
             </div>
+            {response && response}
           </div>
 
           <div className="w-full flex flex-col justify-center items-start gap-1">
