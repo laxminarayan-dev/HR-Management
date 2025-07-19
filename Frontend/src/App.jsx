@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { Fragment, useState } from "react";
 
 import AdminLogin from "./appModules/modules/admin/auth/AdminLogin";
+import ErrorPage from "./appModules/sharedComponents/ErrorPage";
 import Root from "./Root";
 import Dashboard from "./appModules/modules/admin/Dashboard";
 import Employees from "./appModules/modules/admin/Employees";
@@ -10,7 +11,7 @@ import Leaves from "./appModules/modules/admin/Leaves";
 import Salary from "./appModules/modules/admin/Salary";
 
 const App = () => {
-  const [isloggedIn, setIsLoggedIn] = useState(false);
+  const [isloggedIn, setIsLoggedIn] = useState(true);
   return (
     <Fragment>
       {isloggedIn == true ? (
@@ -22,8 +23,8 @@ const App = () => {
               <Route path="departments" element={<Department />} />
               <Route path="leaves" element={<Leaves />} />
               <Route path="salary" element={<Salary />} />
-              <Route path="*" element={<Dashboard />} />
             </Route>
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </Fragment>
       ) : (
