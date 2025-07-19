@@ -1,0 +1,61 @@
+import { Fragment, useEffect } from "react";
+import { useState } from "react";
+const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const [selectedLink, setSelectedLink] = useState("");
+  const links = [
+    { name: "Dashboard", path: "/" },
+    { name: "Employees", path: "/employees" },
+    { name: "Departments", path: "/departments" },
+    { name: "Leaves", path: "/leaves" },
+    { name: "Salary", path: "/salary" },
+    { name: "Logout", path: "/logout" },
+  ];
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    const currentLink = links.find((link) => link.path === currentPath);
+    if (currentLink) {
+      setSelectedLink(currentLink.name.toLowerCase());
+    }
+  }, []);
+  return (
+    <Fragment>
+      <div
+        onClick={() => setIsSidebarOpen(false)}
+        className={`absolute bg-[rgba(0,0,0,0.5)] w-full h-[100dvh] top-15 sm:hidden ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
+      ></div>
+      {/* sidebar  */}
+      <div
+        className={`absolute top-15 w-56 flex h-[100dvh] flex-col justify-between border-e border-gray-100 bg-white border-t  ${
+          isSidebarOpen ? "left-[0%]" : "left-[-100%]"
+        }  sm:left-0                
+        transition-all duration-300 ease-in-out z-10`}
+      >
+        <div className="px-4 py-6">
+          <ul className="space-y-1">
+            {links.map((link, index) => (
+              <li key={index}>
+                <button
+                  onClick={() => {
+                    setSelectedLink(link.name.toLowerCase());
+                    setIsSidebarOpen(false);
+                  }}
+                  className={`w-full text-left block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-slate-900 hover:text-slate-100 ${
+                    selectedLink === link.name.toLowerCase() ||
+                    selectedLink === link.path
+                      ? "bg-slate-900 text-slate-100"
+                      : ""
+                  }`}
+                >
+                  {link.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+export default Sidebar;

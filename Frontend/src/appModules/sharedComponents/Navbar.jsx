@@ -1,27 +1,25 @@
 import { Link } from "react-router-dom";
+import { X, Menu } from "lucide-react";
 
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "User", href: "/user/login", current: false },
-  { name: "Admin", href: "/admin/login", current: false },
-  { name: "About", href: "#", current: false },
-];
-
-export default function Navbar() {
+export default function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
   return (
-    <nav className="flex justify-between items-center bg-indigo-200 h-10 p-6">
+    <nav className="flex justify-between items-center bg-white px-6 py-4 shadow-sm">
       <div>
         <Link to="/">
-          <img className="w-8" src="/erp.png" alt="" />
+          <h1 className="text-lg font-bold font-serif">Admin Dashboard</h1>
         </Link>
       </div>
       <div>
-        <ul className="flex gap-5">
-          {navigation.map((item, index) => (
-            <li key={index}>
-              <Link to={item.href}>{item.name}</Link>
-            </li>
-          ))}
+        <ul className="flex gap-5 sm:hidden">
+          <li>
+            <button
+              onClick={() => {
+                setIsSidebarOpen(!isSidebarOpen);
+              }}
+            >
+              {isSidebarOpen ? <X /> : <Menu />}
+            </button>
+          </li>
         </ul>
       </div>
     </nav>
