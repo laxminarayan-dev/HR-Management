@@ -24,6 +24,7 @@ route.post("/login", async (req, res) => {
         else {
             if (password == user.password) {
                 res.status(200).json({
+                    "token":user._id,
                     "message": "login successfull"
                 })
             } else {
