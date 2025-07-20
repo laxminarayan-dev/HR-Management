@@ -9,8 +9,6 @@ const AdminLogin = ({ setIsLoggedIn }) => {
     e.preventDefault();
     let formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    console.log(data);
-
     fetch("http://localhost:8000/api/auth/login", {
       method: "POST",
       headers: {
@@ -20,9 +18,10 @@ const AdminLogin = ({ setIsLoggedIn }) => {
     })
       .then(async (res) => {
         let resp = await res.json();
-        console.log(resp);
-
         if (res.ok) {
+          if(data.rememberMe){
+            localStorage.setItem("token",resp.token)
+          }
           setResponse({ success: true, msg: resp.message });
           setTimeout(() => {
             setResponse(null);
@@ -35,7 +34,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
           }, 1500);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
   return (
     <div
@@ -104,7 +103,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
           <div className="w-full flex flex-col justify-center items-start gap-1">
             <div className="flex justify-between items-center w-full py-3">
               <div className="flex justify-center items-center gap-2">
-                <input type="checkbox" name="" id="" />{" "}
+                <input type="checkbox" name="rememberMe" id="rememberMe" />
                 <p className="text-sm text-slate-900">Remember me</p>
               </div>
               <Link className="text-sm underline text-slate-900">
