@@ -25,13 +25,13 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     <Fragment>
       <div
         onClick={() => setIsSidebarOpen(false)}
-        className={`absolute bg-[rgba(0,0,0,0.5)] w-full h-screen top-15 sm:hidden ${
+        className={`fixed bg-[rgba(0,0,0,0.5)] w-full h-screen top-15 sm:hidden ${
           isSidebarOpen ? "block" : "hidden"
         }`}
       ></div>
       {/* sidebar  */}
       <div
-        className={`fixed top-15 w-56 flex  flex-col justify-between border-e border-gray-100 bg-white border-t  ${
+        className={`fixed top-15 w-56 min-h-screen max-h-screen flex  flex-col justify-between border-e border-gray-100 bg-white border-t  ${
           isSidebarOpen ? "left-[0%]" : "left-[-100%]"
         }  sm:left-0                
         transition-all duration-300 ease-in-out z-10`}
