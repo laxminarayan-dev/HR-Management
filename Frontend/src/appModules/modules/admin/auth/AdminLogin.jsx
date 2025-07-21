@@ -2,6 +2,7 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 0.0;
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 const AdminLogin = ({ setIsLoggedIn }) => {
   const [passwordState, setPasswordState] = useState(true);
   const [response, setResponse] = useState(null);
@@ -9,7 +10,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
     e.preventDefault();
     let formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    fetch("http://localhost:8000/api/auth/login", {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
