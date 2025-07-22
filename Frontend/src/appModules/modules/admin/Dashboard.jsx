@@ -101,7 +101,7 @@ const Dashboard = () => {
               className="flex rounded-lg gap-2 shadow-sm py-2 px-4 bg-white border border-slate-200"
             >
               <div className="flex flex-col justify-center items-start flex-1">
-                <span className="font-semibold text-xs truncate max-w-35">
+                <span className="font-semibold text-xs line-clamp-1 ">
                   {item.heading}
                 </span>
                 <span className="font-bold text-xl">
