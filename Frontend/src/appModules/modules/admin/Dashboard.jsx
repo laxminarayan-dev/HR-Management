@@ -119,7 +119,7 @@ const Dashboard = () => {
       {/* bar section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 relative z-1">
         <div className="bg-white py-3 px-5 border border-stone-100 rounded-md shadow-sm">
-          <h1 className="font-bold text-2xl">Leave Trend - 2025</h1>
+          <h1 className="font-bold text-2xl">Leave Trend</h1>
           <p className="text-sm mb-5">Monthly count of employees on leave.</p>
           <MyBarChart />
         </div>
