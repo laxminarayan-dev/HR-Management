@@ -25,7 +25,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     <Fragment>
       <div
         onClick={() => setIsSidebarOpen(false)}
-        className={`fixed bg-[rgba(0,0,0,0.5)] w-full h-screen top-15 sm:hidden ${
+        className={`fixed bg-[rgba(0,0,0,0.5)] w-full h-screen top-15 z-2 sm:hidden ${
           isSidebarOpen ? "block" : "hidden"
         }`}
       ></div>
