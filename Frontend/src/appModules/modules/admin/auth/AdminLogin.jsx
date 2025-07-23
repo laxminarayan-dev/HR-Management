@@ -4,10 +4,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const AdminLogin = ({ setIsLoggedIn }) => {
+  const [isLoading, setIsLoding] = useState(false);
   const [passwordState, setPasswordState] = useState(true);
   const [response, setResponse] = useState(null);
+  const [submitDisable, setSubmitDisable] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoding(true);
     let formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
@@ -19,9 +23,11 @@ const AdminLogin = ({ setIsLoggedIn }) => {
     })
       .then(async (res) => {
         let resp = await res.json();
+        setSubmitDisable(true);
+        setIsLoding(false);
         if (res.ok) {
-          if(data.rememberMe){
-            localStorage.setItem("token",resp.token)
+          if (data.rememberMe) {
+            localStorage.setItem("token", resp.token);
           }
           setResponse({ success: true, msg: resp.message });
           setTimeout(() => {
@@ -32,23 +38,37 @@ const AdminLogin = ({ setIsLoggedIn }) => {
           setResponse({ success: false, msg: resp.message });
           setTimeout(() => {
             setResponse(null);
+            setSubmitDisable(false);
           }, 1500);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setIsLoding(false);
+        setResponse({ success: false, msg: "Internal Server Error" });
+        setTimeout(() => {
+          setResponse(null);
+          setSubmitDisable(false);
+        }, 1500);
+      });
   };
   return (
     <div
       className="flex justify-center items-center w-full min-h-[100dvh] bg-no-repeat bg-cover bg-center"
       style={{ backgroundImage: `url("/loginb.jpg") ` }}
     >
+      {isLoading && (
+        <div className="z-10 absolute top-0 left-0 rounded-md bg-[rgba(0,0,0,0.3)] w-full h-full flex justify-center items-center">
+          <div className="animate-spin w-10 h-10 border-2 rounded-full border-b-transparent"></div>
+        </div>
+      )}
       <div
-        className=" w-96 shadow-lg shadow-blue-200 py-10 rounded-lg backdrop-blur-sm"
+        className="w-96 shadow-lg shadow-blue-200 py-10 rounded-lg backdrop-blur-sm h-96 "
         style={{ background: "rgba(255,255,255,0.2)" }}
       >
         <form
           action="#"
-          className="flex flex-col justify-center items-start gap-5 h-80 px-10 "
+          className="flex flex-col justify-center items-start gap-5 h-80 px-10 flex-1"
           onSubmit={handleSubmit}
         >
           <div className="text-center w-full">
@@ -115,6 +135,7 @@ const AdminLogin = ({ setIsLoggedIn }) => {
               className="border border-slate-300 bg-slate-900 text-white rounded-lg w-full px-2 py-1"
               type="submit"
               value="Submit"
+              disabled={submitDisable}
             />
           </div>
         </form>
