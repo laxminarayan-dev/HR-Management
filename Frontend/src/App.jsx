@@ -12,15 +12,15 @@ import Leaves from "./appModules/modules/admin/Leaves";
 import Salary from "./appModules/modules/admin/Salary";
 
 const App = () => {
-  const [isloggedIn, setIsLoggedIn] = useState(true);
-  // useEffect(() => {
-  //   let token = localStorage.getItem("token");
-  //   if (token && token != "") {
-  //     setIsLoggedIn(true);
-  //   } else {
-  //     setIsLoggedIn(false);
-  //   }
-  // }, []);
+  const [isloggedIn, setIsLoggedIn] = useState(null);
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (token && token != "") {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
   return (
     <Fragment>
       {isloggedIn === null ? (
