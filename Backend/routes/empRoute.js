@@ -63,7 +63,9 @@ route.post("/addEmp", async (req, res) => {
                 console.log(emp);
 
                 await emp.save()
+                const emps = await EmpModel.find()
                 res.status(200).send({
+                    emps: emps,
                     message: "Emp Data saved successfully"
                 })
             } catch (error) {

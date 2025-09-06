@@ -12,7 +12,6 @@ const Employees = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         if (data.emps) {
           setEmplist(data.emps);
         }
@@ -22,28 +21,31 @@ const Employees = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-5">Employee Management</h1>
       {/* Employee management content goes here */}
 
-      <div className="flex items-center justify-between pb-5">
-        <div>
-          {emplist.length == 0 && (
-            <div>
-              <h1>No Employee found!</h1>
-            </div>
-          )}
-        </div>
+      <div className="flex items-center justify-between mb-10">
+        <h1 className="text-2xl font-bold">Employee Management</h1>
         <button
           type="button"
           onClick={() => setAddEmpModel(true)}
           className="border p-1 px-3 rounded-full cursor-pointer hover:bg-gray-900 hover:text-gray-100"
         >
-          Add Emp
+          Add Employee
         </button>
       </div>
-      {console.log(emplist)}
+      {emplist.length == 0 && (
+        <div>
+          <h1>No Employee found!</h1>
+        </div>
+      )}
       {emplist.length > 0 && <EmployeeDetailTable tableData={emplist} />}
-      {<AddEmployeeModal open={addEmpModel} onClose={setAddEmpModel} />}
+      {
+        <AddEmployeeModal
+          open={addEmpModel}
+          onClose={setAddEmpModel}
+          onAdd={setEmplist}
+        />
+      }
     </div>
   );
 };
@@ -51,7 +53,7 @@ const Employees = () => {
 export default Employees;
 
 export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
-  const [form, setForm] = useState({
+  const initialData = {
     id: "",
     fullName: "",
     email: "",
@@ -71,7 +73,8 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     addressPostalCode: "",
     addressCountry: "India",
     hireDate: "",
-  });
+  };
+  const [form, setForm] = useState(initialData);
 
   function handleChange(e) {
     setForm((prev) => ({
@@ -122,7 +125,11 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if (data.emps) {
+          onAdd(data.emps);
+          setForm(initialData);
+          onClose(false);
+        }
       })
       .catch((err) => console.error(err));
     // end api
@@ -150,12 +157,12 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative">
+      <div
+        ref={formRef}
+        className="relative bg-white p-6 rounded-lg shadow-lg max-w-xl w-full overflow-y-hidden  h-screen sm:max-h-[90vh] pt-12 sm:pt-5 sm:pb-10"
+      >
         <h2 className="text-2xl font-bold mb-4">Add Employee</h2>
-        <div
-          ref={formRef}
-          className="h-[80vh] overflow-y-scroll overflow-x-hidden p-4"
-        >
+        <div className="h-[100%] overflow-y-scroll overflow-x-hidden p-4 pb-14 sm:pb-6">
           <form className="grid gap-4" onSubmit={handleSubmit}>
             <div className="grid gap-1">
               <label htmlFor="fullName" className="text-sm font-medium">
@@ -272,73 +279,95 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
             </div>
 
             {/* Salary section */}
-            <div className="grid sm:grid-cols-2 gap-2">
-              <div className="grid gap-1">
-                <label htmlFor="salaryBasic" className="text-sm font-medium">
-                  Basic Salary
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* Basic Salary */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="salaryBasic"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Basic Salary <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="salaryBasic"
                   name="salaryBasic"
                   type="number"
-                  className="border border-gray-300 rounded-lg py-1 px-3"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.salaryBasic}
                   onChange={handleChange}
                   required
                 />
               </div>
-              <div className="grid gap-1">
-                <label htmlFor="salaryBonus" className="text-sm font-medium">
+
+              {/* Bonus */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="salaryBonus"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Bonus
                 </label>
                 <input
                   id="salaryBonus"
                   name="salaryBonus"
                   type="number"
-                  className="border border-gray-300 rounded-lg py-1 px-3"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.salaryBonus}
                   onChange={handleChange}
                 />
               </div>
             </div>
 
-            {/* Leaves section */}
-            <div className="grid sm:grid-cols-2 gap-2">
-              <div className="grid gap-1">
-                <label htmlFor="leavesTotal" className="text-sm font-medium">
+            {/* Leaves + Status Section */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* Total Leaves */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="leavesTotal"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Total Leaves
                 </label>
                 <input
                   id="leavesTotal"
                   name="leavesTotal"
                   type="number"
-                  className="border border-gray-300 rounded-lg py-1 px-3"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.leavesTotal}
                   onChange={handleChange}
                 />
               </div>
-              <div className="grid gap-1">
-                <label htmlFor="leavesTaken" className="text-sm font-medium">
+
+              {/* Leaves Taken */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="leavesTaken"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Leaves Taken
                 </label>
                 <input
                   id="leavesTaken"
                   name="leavesTaken"
                   type="number"
-                  className="border border-gray-300 rounded-lg py-1 px-3"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.leavesTaken}
                   onChange={handleChange}
                 />
               </div>
+
               {/* Status */}
-              <div className="grid gap-1">
-                <label htmlFor="status" className="text-sm font-medium">
+              <div className="flex flex-col sm:col-span-2">
+                <label
+                  htmlFor="status"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Status
                 </label>
                 <select
                   id="status"
                   name="status"
-                  className="border border-gray-300 rounded-lg py-1 px-3"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.status}
                   onChange={handleChange}
                 >
@@ -349,8 +378,8 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
               </div>
             </div>
 
-            {/* Address section */}
-            <div className="grid sm:grid-cols-2 gap-2">
+            {/* Address Section */}
+            <div className="grid sm:grid-cols-2 gap-4 mt-4">
               {[
                 { id: "addressLine1", label: "Address Line 1" },
                 { id: "addressLine2", label: "Address Line 2" },
@@ -359,14 +388,17 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
                 { id: "addressPostalCode", label: "Postal Code" },
                 { id: "addressCountry", label: "Country" },
               ].map((field) => (
-                <div key={field.id} className="grid gap-1">
-                  <label htmlFor={field.id} className="text-sm font-medium">
+                <div key={field.id} className="flex flex-col">
+                  <label
+                    htmlFor={field.id}
+                    className="text-sm font-medium text-gray-700"
+                  >
                     {field.label}
                   </label>
                   <input
                     id={field.id}
                     name={field.id}
-                    className="border border-gray-300 rounded-lg py-1 px-3"
+                    className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                     value={form[field.id]}
                     onChange={handleChange}
                   />
