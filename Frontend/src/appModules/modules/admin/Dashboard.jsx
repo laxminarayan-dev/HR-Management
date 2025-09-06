@@ -1,57 +1,66 @@
-import { Users, Building, Banknote, User, Ellipsis } from "lucide-react";
+import { Users, Building, Banknote } from "lucide-react";
 import { MyLineChart, MyPieChart, MyBarChart } from "../../lib/MyChart";
-
+import EmployeeActivityTable from "../../lib/tables/EmployeeActivityTable";
 const Dashboard = () => {
   const employees = [
     {
+      id: "userq2345",
       name: "Alice Johnson",
       role: "Software Engineer",
       department: "Engineering",
       status: "Active",
     },
     {
+      id: "user3452",
       name: "Michael Smith",
       role: "HR Manager",
       department: "Human Resources",
       status: "Active",
     },
     {
+      id: "user2353r",
       name: "Sophie Lee",
       role: "Product Designer",
       department: "Design",
       status: "On Leave",
     },
     {
+      id: "user234rwe",
       name: "Daniel Kim",
       role: "Sales Executive",
       department: "Sales",
       status: "Active",
     },
     {
+      id: "userqw4rase",
       name: "Rachel Adams",
       role: "Marketing Lead",
       department: "Marketing",
       status: "Resigned",
     },
     {
+      id: "userasdvc",
       name: "James Patel",
       role: "DevOps Engineer",
       department: "Engineering",
       status: "Active",
     },
     {
+      id: "userq2345",
       name: "Laura Chen",
       role: "Recruiter",
       department: "Human Resources",
       status: "Active",
     },
     {
+      id: "userq2345",
       name: "Chris Evans",
       role: "QA Analyst",
       department: "Quality Assurance",
       status: "On Leave",
     },
     {
+      id: "userq2345",
       name: "Priya Singh",
       role: "Business Analyst",
       department: "Product",
@@ -140,46 +149,7 @@ const Dashboard = () => {
       </div>
       {/* tabular section  */}
       <div>
-        <div className="bg-white border border-stone-100 shadow-sm p-5 flex flex-col gap-8 rounded-lg">
-          <div>
-            <h1 className="text-2xl font-bold">Recent Employee Activity</h1>
-            <p className="text-sm">
-              An overview of recently active or updated employee profiles.
-            </p>
-          </div>
-          {/* table */}
-          <div className="">
-            {/* table header */}
-            <div className="flex justify-center border-b gap-3 border-stone-300 py-3 px-1 text-sm">
-              <h1 className="flex-[1.5] text-slate-500">Employee</h1>
-              <h1 className="flex-1 text-slate-500 hidden md:block">
-                Department
-              </h1>
-              <h1 className="flex-1 text-slate-500 hidden lg:block">Role</h1>
-              <h1 className="flex-1 text-slate-500">Status</h1>
-              <h1 className="flex-[0.5] text-slate-500"></h1>
-            </div>
-            {/* table body */}
-            <div>
-              {employees.map((emp, index) => (
-                <div
-                  key={emp.name + index}
-                  className="flex justify-center border-b gap-3 border-stone-300 py-3 text-sm"
-                >
-                  <h1 className="flex-[1.5] flex justify-start items-center gap-1 truncate">
-                    <User size={16} /> {emp.name}
-                  </h1>
-                  <h1 className="flex-1 hidden md:block">{emp.role}</h1>
-                  <h1 className="flex-1 hidden lg:block">{emp.department}</h1>
-                  <h1 className="flex-1">{emp.status}</h1>
-                  <h1 className="flex-[0.5]">
-                    <Ellipsis />
-                  </h1>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <EmployeeActivityTable tableData={employees} />
       </div>
     </section>
   );

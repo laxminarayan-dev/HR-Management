@@ -24,7 +24,7 @@ export default function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
       <div>
         <Link to="/" className="flex gap-2 justify-center items-center">
           <NotebookPen />
-          <h1 className="text-lg font-bold font-m">HRFusion</h1>
+          <h1 className="text-lg font-bold font-m">Workology</h1>
         </Link>
       </div>
       <div>
@@ -56,7 +56,7 @@ export default function Navbar({ isSidebarOpen, setIsSidebarOpen }) {
             </div>
           </li>
 
-          <li className="block sm:hidden cursor-pointer">
+          <li className="block md:hidden cursor-pointer">
             <button
               aria-label="handlemenu"
               className="cursor-pointer"

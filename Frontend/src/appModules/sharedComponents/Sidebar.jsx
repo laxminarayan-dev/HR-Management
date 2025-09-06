@@ -11,21 +11,24 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     { name: "Departments", path: "/departments" },
     { name: "Leaves", path: "/leaves" },
     { name: "Salary", path: "/salary" },
-    { name: "Logout", path: "/logout" },
+    { name: "Users", path: "/users" },
   ];
   useEffect(() => {
     const currentPath = location.pathname;
     const currentLink = links.find((link) => link.path === currentPath);
+
     if (currentLink) {
       setSelectedLink(currentLink.name.toLowerCase());
       setIsSidebarOpen(false);
+    } else {
+      setSelectedLink(null);
     }
   }, [location.pathname]);
   return (
     <Fragment>
       <div
         onClick={() => setIsSidebarOpen(false)}
-        className={`fixed bg-[rgba(0,0,0,0.5)] w-full h-screen top-15 z-2 sm:hidden ${
+        className={`fixed bg-[rgba(0,0,0,0.5)] w-full h-screen top-15 z-2 md:hidden ${
           isSidebarOpen ? "block" : "hidden"
         }`}
       ></div>
@@ -33,7 +36,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       <div
         className={`fixed top-15 w-56 min-h-screen max-h-screen flex  flex-col justify-between border-e border-gray-100 bg-white border-t  ${
           isSidebarOpen ? "left-[0%]" : "left-[-100%]"
-        }  sm:left-0                
+        }  md:left-0                
         transition-all duration-300 ease-in-out z-10`}
       >
         <div className="px-4 py-6">

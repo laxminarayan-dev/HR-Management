@@ -10,6 +10,8 @@ import Employees from "./appModules/modules/admin/Employees";
 import Department from "./appModules/modules/admin/Department";
 import Leaves from "./appModules/modules/admin/Leaves";
 import Salary from "./appModules/modules/admin/Salary";
+import Users from "./appModules/modules/admin/User/Users";
+import IndUser from "./appModules/modules/admin/User/IndUser";
 
 const App = () => {
   const [isloggedIn, setIsLoggedIn] = useState(null);
@@ -33,6 +35,8 @@ const App = () => {
             <Route path="departments" element={<Department />} />
             <Route path="leaves" element={<Leaves />} />
             <Route path="salary" element={<Salary />} />
+            <Route path="users" element={<Users />} />
+            <Route path="users/:id" element={<IndUser />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>

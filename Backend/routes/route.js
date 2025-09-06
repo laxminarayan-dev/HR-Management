@@ -2,6 +2,8 @@ const express = require("express");
 const route = express.Router()
 const authRoute = require("./authRoute")
 const userModel = require("../models/userModel")
+const usersRoute = require("./usersRoute")
+const empRoute = require("./empRoute")
 
 route.get("/api", async (req, res) => {
     try {
@@ -9,12 +11,14 @@ route.get("/api", async (req, res) => {
         res.status(201).send(users)
     } catch (error) {
         res.status(500).send({
-            message: "Failed to save User Data "
+            message: "Failed to Load User Data "
         })
     }
 })
-
 route.use("/api/auth", authRoute)
+route.use("/api/users", usersRoute)
+route.use("/api/emp", empRoute)
+
 route.use((req, res) => {
     res.status(404).send(`
         <div style=" height:95vh; display:flex; justify-content:center; align-items:center;">
