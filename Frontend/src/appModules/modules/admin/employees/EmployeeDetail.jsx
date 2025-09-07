@@ -191,7 +191,7 @@ export default function EmployeeDetail() {
             }
           </div>
           {response && (
-            <div className="absolute top-20 right-1 transform -translate-x-1/2 bg-gray-800 p-4 rounded shadow-lg">
+            <div className="fixed top-20 right-1 transform -translate-x-1/2 bg-gray-800 p-4 rounded shadow-lg">
               <p
                 className={response.success ? "text-green-500" : "text-red-500"}
               >
