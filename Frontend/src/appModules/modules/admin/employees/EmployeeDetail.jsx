@@ -216,6 +216,7 @@ export const UpdateEmployeeModal = ({
     addressCountry: initialData.address.country,
     id: initialData._id,
   };
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [objComp, setObjComp] = useState(true);
   const departments = [{ _id: 1, name: "Tech" }];
@@ -284,7 +285,7 @@ export const UpdateEmployeeModal = ({
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    setLoading(true);
     // Compose salary, leaves, address objects
     const empData = {
       fullName: form.fullName,
@@ -328,6 +329,7 @@ export const UpdateEmployeeModal = ({
           onUpdate(data.emp);
           onClose(false);
         }
+        setLoading(false);
       })
       .catch((err) => console.error(err));
     // end api
@@ -625,6 +627,12 @@ export const UpdateEmployeeModal = ({
           </form>
         </div>
       </div>
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
     </div>
   );
 };
