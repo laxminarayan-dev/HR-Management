@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import EmployeeDetailTable from "../../../lib/tables/EmployeeDetailTable";
 
 const Employees = () => {
-  const [emplist, setEmplist] = useState([]);
+  const [emplist, setEmplist] = useState(null);
   const [addEmpModel, setAddEmpModel] = useState(false);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/allEmployees`, {
@@ -14,6 +14,8 @@ const Employees = () => {
       .then((data) => {
         if (data.emps) {
           setEmplist(data.emps);
+        } else {
+          setEmplist([]);
         }
       })
       .catch((err) => console.log(err));
@@ -33,12 +35,18 @@ const Employees = () => {
           Add Employee
         </button>
       </div>
-      {emplist.length == 0 && (
+      {emplist == null ? (
+        <div className="w-full h-90 flex justify-center items-center">
+          <div className="animate-spin border border-b-white border-l-0 w-10 h-10 rounded-full"></div>
+        </div>
+      ) : emplist.length == 0 ? (
         <div>
           <h1>No Employee found!</h1>
         </div>
+      ) : (
+        emplist.length > 0 && <EmployeeDetailTable tableData={emplist} />
       )}
-      {emplist.length > 0 && <EmployeeDetailTable tableData={emplist} />}
+
       {
         <AddEmployeeModal
           open={addEmpModel}
