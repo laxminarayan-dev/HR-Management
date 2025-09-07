@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import EmployeeDetailTable from "../../lib/tables/EmployeeDetailTable";
+import EmployeeDetailTable from "../../../lib/tables/EmployeeDetailTable";
 
 const Employees = () => {
   const [emplist, setEmplist] = useState([]);
@@ -116,7 +116,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     };
 
     // call api
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/addEmp`, {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

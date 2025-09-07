@@ -6,7 +6,8 @@ import AdminLogin from "./appModules/modules/admin/auth/AdminLogin";
 import ErrorPage from "./appModules/sharedComponents/ErrorPage";
 import Loading from "./appModules/sharedComponents/Loading";
 import Dashboard from "./appModules/modules/admin/Dashboard";
-import Employees from "./appModules/modules/admin/Employees";
+import Employees from "./appModules/modules/admin/employees/Employees";
+import EmployeeDetail from "./appModules/modules/admin/employees/EmployeeDetail";
 import Department from "./appModules/modules/admin/Department";
 import Leaves from "./appModules/modules/admin/Leaves";
 import Salary from "./appModules/modules/admin/Salary";
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/" element={<Root />}>
             <Route index element={<Dashboard />} />
             <Route path="employees" element={<Employees />} />
+            <Route path="employee/:id" element={<EmployeeDetail />} />
             <Route path="departments" element={<Department />} />
             <Route path="leaves" element={<Leaves />} />
             <Route path="salary" element={<Salary />} />

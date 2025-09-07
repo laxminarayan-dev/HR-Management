@@ -25,7 +25,22 @@ route.get("/allEmployees", async (req, res) => {
 
 
 })
-route.post("/addEmp", async (req, res) => {
+
+route.get("/detail/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const emp = await EmpModel.findOne({ _id: id });
+        if (!emp) {
+            return res.status(404).json({ message: "no emp found" });
+        }
+        return res.status(200).json({ message: "emp found", emp });
+    } catch (error) {
+        console.error("Emp load error:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+route.post("/add", async (req, res) => {
 
     const { fullName, email, phone, dob, department, designation, hireDate, salary, leaves, status, address } = req.body;
     try {
@@ -87,4 +102,31 @@ route.post("/addEmp", async (req, res) => {
     }
 
 })
+
+route.post("/update/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const emp = await EmpModel.findById(id);
+        if (!emp) {
+            return res.status(404).json({ message: "No Employee Found!" });
+        }
+
+        // Update the employee document with new data from req.body
+        await EmpModel.findByIdAndUpdate(id, req.body, { new: true });
+
+        // Fetch updated employee details to return
+        const updatedEmp = await EmpModel.findById(id);
+
+        res.status(200).json({
+            emp: updatedEmp,
+            message: "Employee data updated successfully",
+        });
+    } catch (error) {
+        console.error("Failed to update employee data: ", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+
 module.exports = route
