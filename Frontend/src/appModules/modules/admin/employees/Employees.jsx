@@ -83,6 +83,23 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     hireDate: "",
   };
   const [form, setForm] = useState(initialData);
+  const [loading, setLoading] = useState(false);
+  const departments = [{ _id: 1, name: "Tech" }];
+  const designations = [{ _id: 1, name: "Manager" }];
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (formRef.current && !formRef.current.contains(event.target)) {
+        onClose(); // 🔥 call close function
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   function handleChange(e) {
     setForm((prev) => ({
@@ -93,7 +110,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    setLoading(true);
     // Compose salary, leaves, address objects
     const empData = {
       fullName: form.fullName,
@@ -137,29 +154,12 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
           onAdd(data.emps);
           setForm(initialData);
           onClose(false);
+          setLoading(false);
         }
       })
       .catch((err) => console.error(err));
     // end api
   }
-
-  const departments = [{ _id: 1, name: "Tech" }];
-  const designations = [{ _id: 1, name: "Manager" }];
-
-  const formRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (formRef.current && !formRef.current.contains(event.target)) {
-        onClose(); // 🔥 call close function
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
 
   if (!open) return null;
 
@@ -429,6 +429,11 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
           </form>
         </div>
       </div>
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900/70 bg-opacity-60 z-50">
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
     </div>
   );
 };

@@ -35,6 +35,7 @@ export default function EmployeeDetail() {
   const [updateEmpModel, setUpdateEmpModel] = useState(false);
   const [employee, setEmployee] = useState(null);
   const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -55,11 +56,13 @@ export default function EmployeeDetail() {
   }, []);
 
   function handleDelete() {
+    setLoading(true);
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/${id}`, {
       method: "Delete",
     })
       .then((res) => {
         if (res.ok) {
+          setLoading(false);
           navigate("/employees");
         }
       })
@@ -211,12 +214,17 @@ export default function EmployeeDetail() {
             }
           </div>
           {response && (
-            <div className="fixed top-20 right-1 transform -translate-x-1/2 bg-gray-800 p-4 rounded shadow-lg">
+            <div className="fixed top-20 right-8 transform -translate-x-1 bg-gray-800 p-4 rounded shadow-lg">
               <p
                 className={response.success ? "text-green-500" : "text-red-500"}
               >
                 {response.msg || "Default Message"}
               </p>
+            </div>
+          )}
+          {loading && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-900/70 bg-opacity-60 z-50">
+              <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
           )}
         </React.Fragment>
@@ -679,7 +687,7 @@ export const UpdateEmployeeModal = ({
       </div>
 
       {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900/70 bg-opacity-60 z-50">
           <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
