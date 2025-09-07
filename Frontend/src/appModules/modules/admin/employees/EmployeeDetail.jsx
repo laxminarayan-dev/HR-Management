@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function EmployeeDetail() {
   const initialData = {
@@ -35,8 +35,9 @@ export default function EmployeeDetail() {
   const [updateEmpModel, setUpdateEmpModel] = useState(false);
   const [employee, setEmployee] = useState(null);
   const [response, setResponse] = useState(null);
-
+  const navigate = useNavigate();
   const { id } = useParams();
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/detail/${id}`)
       .then((res) => {
@@ -52,6 +53,20 @@ export default function EmployeeDetail() {
       })
       .catch((err) => console.error(err));
   }, []);
+
+  function handleDelete() {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/${id}`, {
+      method: "Delete",
+    })
+      .then((res) => {
+        if (res.ok) {
+          navigate("/employees");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   return (
     <div className="bg-white p-8 w-full min-h-60">
@@ -176,7 +191,12 @@ export default function EmployeeDetail() {
               >
                 Edit
               </button>
-              <button className="flex-1 px-4 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600">
+              <button
+                onClick={() => {
+                  handleDelete();
+                }}
+                className="flex-1 px-4 py-2 rounded-lg bg-red-500 text-white font-bold shadow hover:bg-red-600"
+              >
                 Remove
               </button>
             </div>

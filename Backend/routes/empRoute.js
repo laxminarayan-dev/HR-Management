@@ -127,6 +127,28 @@ route.post("/update/:id", async (req, res) => {
     }
 });
 
+route.delete("/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const emp = await EmpModel.findById(id);
+        if (!emp) {
+            return res.status(404).json({
+                message: "No Employee Found!"
+            });
+        }
+        // Delete the employee
+        await EmpModel.findByIdAndDelete(id);
+
+        res.status(200).json({
+            message: "Employee deleted successfully",
+        });
+    } catch (error) {
+        console.error("Failed to delete employee data: ", error);
+        res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+})
 
 
 module.exports = route
