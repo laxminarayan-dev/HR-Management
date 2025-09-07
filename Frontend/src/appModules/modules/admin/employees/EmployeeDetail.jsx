@@ -53,7 +53,7 @@ export default function EmployeeDetail() {
   }, []);
 
   return (
-    <div className="bg-white p-8 w-full">
+    <div className="bg-white p-8 w-full min-h-60">
       {employee == null ? (
         <div className="w-full h-90 flex justify-center items-center">
           <div className="animate-spin border border-b-white border-l-0 w-10 h-10 rounded-full"></div>
