@@ -4,6 +4,7 @@ const authRoute = require("./authRoute")
 const userModel = require("../models/userModel")
 const usersRoute = require("./usersRoute")
 const empRoute = require("./empRoute")
+const deptRoute = require("./deptRoute")
 
 route.get("/api", async (req, res) => {
     try {
@@ -18,6 +19,7 @@ route.get("/api", async (req, res) => {
 route.use("/api/auth", authRoute)
 route.use("/api/users", usersRoute)
 route.use("/api/emp", empRoute)
+route.use("/api/department", deptRoute)
 
 route.use((req, res) => {
     res.status(404).send(`

@@ -267,6 +267,48 @@ export const UpdateEmployeeModal = ({
   const departments = [{ _id: 1, name: "Tech" }];
   const designations = [{ _id: 1, name: "Manager" }];
   const formRef = useRef(null);
+  const [dob, setDOB] = useState({ min: "", max: "" });
+  const [hireDate, setHireDate] = useState({ min: "", max: "" });
+
+  useEffect(() => {
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+
+    // --- DOB bounds ---
+    const minDob = new Date();
+    minDob.setFullYear(today.getFullYear() - 100);
+
+    const maxDob = new Date();
+    maxDob.setFullYear(today.getFullYear() - 18);
+
+    let minHire = "";
+    if (form.dob) {
+      const dobDate = new Date(form.dob);
+
+      // dob + 18 years
+      const dobPlus18 = new Date(dobDate);
+      dobPlus18.setFullYear(dobPlus18.getFullYear() + 18);
+
+      // today - 10 years
+      const tenYearsBack = new Date();
+      tenYearsBack.setFullYear(today.getFullYear() - 10);
+
+      // latest of the two
+      const minDate = new Date(
+        Math.max(dobPlus18.getTime(), tenYearsBack.getTime())
+      );
+      minHire = minDate.toISOString().split("T")[0];
+    }
+
+    setDOB({
+      min: minDob.toISOString().split("T")[0],
+      max: maxDob.toISOString().split("T")[0],
+    });
+
+    setHireDate({ min: minHire, max: formattedToday });
+  }, [form.dob]);
+
+  console.log(dob, hireDate);
 
   // use effect for updating value form when model is opened
   useEffect(() => {
@@ -476,7 +518,9 @@ export const UpdateEmployeeModal = ({
                 name="dob"
                 type="date"
                 className="border w-full border-gray-300 rounded-lg py-1 px-3"
-                value={formatDateForInput(form.dob)}
+                defaultValue={formatDateForInput(form.dob)}
+                min={dob.min}
+                max={dob.max}
                 onChange={handleChange}
               />
             </div>
@@ -534,7 +578,9 @@ export const UpdateEmployeeModal = ({
                 name="hireDate"
                 type="date"
                 className="border w-full border-gray-300 rounded-lg py-1 px-3"
-                value={formatDateForInput(form.hireDate)}
+                defaultValue={formatDateForInput(form.hireDate)}
+                min={hireDate.min}
+                max={hireDate.max}
                 onChange={handleChange}
               />
             </div>

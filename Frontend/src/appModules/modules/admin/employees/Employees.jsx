@@ -87,6 +87,17 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
   const departments = [{ _id: 1, name: "Tech" }];
   const designations = [{ _id: 1, name: "Manager" }];
   const formRef = useRef(null);
+  const [defaultDate, setDefaultDate] = useState("");
+  const [today, setToday] = useState("");
+
+  useEffect(() => {
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+    setToday(formattedToday);
+    today.setFullYear(today.getFullYear() - 18);
+    const formattedDate = today.toISOString().split("T")[0];
+    setDefaultDate(formattedDate);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -213,7 +224,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
                 onChange={handleChange}
               />
             </div>
-
+            {/* DOB */}
             <div className="grid gap-1">
               <label htmlFor="dob" className="text-sm font-medium">
                 Date of Birth
@@ -223,7 +234,8 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
                 name="dob"
                 type="date"
                 className="border w-full border-gray-300 rounded-lg py-1 px-3"
-                value={form.dob}
+                defaultValue={defaultDate}
+                max={defaultDate}
                 onChange={handleChange}
               />
             </div>
@@ -272,6 +284,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
               </select>
             </div>
 
+            {/* Hire Date */}
             <div className="grid gap-1">
               <label htmlFor="hireDate" className="text-sm font-medium">
                 Hire Date
@@ -281,7 +294,8 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
                 name="hireDate"
                 type="date"
                 className="border w-full border-gray-300 rounded-lg py-1 px-3"
-                value={form.hireDate}
+                defaultValue={today}
+                min={today}
                 onChange={handleChange}
               />
             </div>
