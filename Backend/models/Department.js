@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { employeeSchema } = require('./EmpModel')
 
 const departmentSchema = new mongoose.Schema({
     name: {
@@ -9,15 +10,9 @@ const departmentSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    head: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Employee" // reference to Employee model
-    },
+    head: employeeSchema,
     employees: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Employee"
-        }
+        employeeSchema
     ],
     budget: {
         allocated: { type: Number, default: 0 }, // yearly budget

@@ -41,7 +41,7 @@ const TableRow = ({ data }) => {
         <User size={16} /> {emp.name}
       </h1>
       <h1 className="flex-1 hidden md:block">{emp.role}</h1>
-      <h1 className="flex-1 hidden lg:block">{emp.department}</h1>
+      <h1 className="flex-1 hidden lg:block">{emp.department?.name || ""}</h1>
       <h1 className="flex-1">{emp.status}</h1>
       <h1 className="flex-[0.5]">
         <Pen

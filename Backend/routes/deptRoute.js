@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router()
-const DeptModel = require("../models/Department")
+const DeptModel = require("../models/Department");
+const { EmpModel } = require("../models/EmpModel");
 
 // 0. Show all Departmentsla tha 
 route.get("/", async (req, res) => {
@@ -34,14 +35,15 @@ route.post("/add", async (req, res) => {
     try {
         const department = new DeptModel(req.body);
         await department.save();
-        res.status(201).json({ message: "Department added successfully", department });
+        const departments = await DeptModel.find()
+        res.status(201).json({ message: "Department added successfully", departments });
     } catch (error) {
         res.status(400).json({ message: "Error adding department", error: error.message });
     }
 });
 
 // 2. Update Department
-route.put("/update/:id", async (req, res) => {
+route.post("/update/:id", async (req, res) => {
     try {
         const department = await DeptModel.findByIdAndUpdate(
             req.params.id,
@@ -52,6 +54,25 @@ route.put("/update/:id", async (req, res) => {
         if (!department) {
             return res.status(404).json({ message: "Department not found" });
         }
+        // Extract the updated employee IDs from full employee objects in req.body.employees
+        const newEmployeeIds = (req.body.employees || []).map(emp => emp._id);
+
+        newEmployeeIds.push(department.head._id)
+
+        // Update employees who are new members or still members, set their department field
+        await EmpModel.updateMany(
+            { _id: { $in: newEmployeeIds } },
+            { $set: { department: { _id: department._id, name: department.name } } }
+        );
+
+        // Remove department from employees who are no longer members
+        await EmpModel.updateMany(
+            {
+                "department._id": department._id,
+                _id: { $nin: newEmployeeIds }
+            },
+            { $set: { department: null } }
+        );
 
         res.json({ message: "Department updated successfully", department });
     } catch (error) {
@@ -63,7 +84,6 @@ route.put("/update/:id", async (req, res) => {
 route.get("/details/:id", async (req, res) => {
     try {
         const department = await DeptModel.findById(req.params.id)
-            .populate("head", "fullName email") // populate head details
             .populate("employees", "fullName email designation"); // populate employees
 
         if (!department) {
@@ -77,13 +97,20 @@ route.get("/details/:id", async (req, res) => {
 });
 
 // 4. Delete Department
-route.delete("/delete/:id", async (req, res) => {
+route.delete("/:id", async (req, res) => {
+    const departmentId = req.params.id;
     try {
+
         const department = await DeptModel.findByIdAndDelete(req.params.id);
 
         if (!department) {
             return res.status(404).json({ message: "Department not found" });
         }
+
+        await EmpModel.updateMany(
+            { "department._id": departmentId }, // filter matching employees
+            { $set: { department: null } }      // set department field to null
+        );
 
         res.json({ message: "Department deleted successfully" });
     } catch (error) {

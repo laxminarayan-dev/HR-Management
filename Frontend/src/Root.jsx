@@ -14,7 +14,7 @@ const Root = () => {
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
-      <div className="flex-1 h-screen ml-0 md:ml-56 mt-15 px-10 py-8 bg-neutral-100">
+      <div className="flex-1 h-screen ml-0 md:ml-56 mt-15 bg-neutral-100">
         <Outlet />
       </div>
     </div>

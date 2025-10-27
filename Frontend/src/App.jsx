@@ -8,11 +8,11 @@ import Loading from "./appModules/sharedComponents/Loading";
 import Dashboard from "./appModules/modules/admin/Dashboard";
 import Employees from "./appModules/modules/admin/employees/Employees";
 import EmployeeDetail from "./appModules/modules/admin/employees/EmployeeDetail";
-import Department from "./appModules/modules/admin/Department";
+import Department from "./appModules/modules/admin/department/Department";
+import DepartmentDetail from "./appModules/modules/admin/department/DepartmentDetail";
 import Leaves from "./appModules/modules/admin/Leaves";
 import Salary from "./appModules/modules/admin/Salary";
 import Users from "./appModules/modules/admin/User/Users";
-import IndUser from "./appModules/modules/admin/User/IndUser";
 
 const App = () => {
   const [isloggedIn, setIsLoggedIn] = useState(null);
@@ -35,10 +35,10 @@ const App = () => {
             <Route path="employees" element={<Employees />} />
             <Route path="employee/:id" element={<EmployeeDetail />} />
             <Route path="departments" element={<Department />} />
+            <Route path="department/:id" element={<DepartmentDetail />} />
             <Route path="leaves" element={<Leaves />} />
             <Route path="salary" element={<Salary />} />
             <Route path="users" element={<Users />} />
-            <Route path="users/:id" element={<IndUser />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>

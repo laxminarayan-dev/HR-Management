@@ -26,7 +26,7 @@ export default function EmployeeDetail() {
     email: "",
     phone: "",
     dob: "",
-    department: "",
+    department: null,
     designation: "",
     hireDate: "",
     status: "",
@@ -72,7 +72,7 @@ export default function EmployeeDetail() {
   }
 
   return (
-    <div className="bg-white p-8 w-full min-h-60">
+    <div className="bg-white p-8 w-full h-screen mx-auto md:px-20 py-8">
       {employee == null ? (
         <div className="w-full h-90 flex justify-center items-center">
           <div className="animate-spin border border-b-white border-l-0 w-10 h-10 rounded-full"></div>
@@ -122,7 +122,9 @@ export default function EmployeeDetail() {
               </div>
               <div>
                 <span className="font-medium text-gray-700">Department:</span>
-                <div className="text-gray-500">{employee.department}</div>
+                <div className="text-gray-500">
+                  {employee.department?.name || "null"}
+                </div>
               </div>
               <div>
                 <span className="font-medium text-gray-700">DOB:</span>
@@ -264,8 +266,19 @@ export const UpdateEmployeeModal = ({
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [objComp, setObjComp] = useState(true);
-  const departments = [{ _id: 1, name: "Tech" }];
-  const designations = [{ _id: 1, name: "Manager" }];
+  const [departments, setDepartments] = useState([]);
+  const designations = [
+    { _id: 1, name: "Manager" },
+    { _id: 2, name: "Senior Manager" },
+    { _id: 3, name: "Assistant Manager" },
+    { _id: 4, name: "Software Engineer" },
+    { _id: 5, name: "Sales Executive" },
+    { _id: 6, name: "HR Specialist" },
+    { _id: 7, name: "Accountant" },
+    { _id: 8, name: "Intern" },
+    { _id: 9, name: "Team Lead" },
+    { _id: 10, name: "Director" },
+  ];
   const formRef = useRef(null);
   const [dob, setDOB] = useState({ min: "", max: "" });
   const [hireDate, setHireDate] = useState({ min: "", max: "" });
@@ -308,7 +321,14 @@ export const UpdateEmployeeModal = ({
     setHireDate({ min: minHire, max: formattedToday });
   }, [form.dob]);
 
-  console.log(dob, hireDate);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/department/`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.departments) setDepartments(data.departments);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   // use effect for updating value form when model is opened
   useEffect(() => {
@@ -534,13 +554,23 @@ export const UpdateEmployeeModal = ({
                 id="department"
                 name="department"
                 className="border border-gray-300 rounded-lg py-1 px-3"
-                value={form.department}
-                onChange={handleChange}
+                value={form.department?._id}
+                onChange={(e) => {
+                  const depId = e.target.value;
+                  const selectedDep = departments.find(
+                    (dep) => dep._id === depId
+                  );
+                  setForm({
+                    ...form,
+                    department:
+                      { _id: selectedDep._id, name: selectedDep.name } || null, // ✅ store full object if you want
+                  });
+                }}
                 required
               >
                 <option value="">Select Department</option>
                 {departments.map((dep) => (
-                  <option key={dep._id} value={dep.name}>
+                  <option key={dep._id} value={dep._id}>
                     {dep.name}
                   </option>
                 ))}

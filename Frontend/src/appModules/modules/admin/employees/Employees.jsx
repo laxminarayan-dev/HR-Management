@@ -22,10 +22,10 @@ const Employees = () => {
   }, []);
 
   return (
-    <div>
+    <div className="p-8">
       {/* Employee management content goes here */}
 
-      <div className="flex items-center justify-between mb-10">
+      <div className="flex items-center justify-between mb-10 ">
         <h1 className="text-2xl font-bold">Employee Management</h1>
         <button
           type="button"
@@ -67,7 +67,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     email: "",
     phone: "",
     dob: "",
-    department: "",
+    department: null,
     designation: "",
     salaryBasic: "",
     salaryBonus: "",
@@ -84,8 +84,20 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
   };
   const [form, setForm] = useState(initialData);
   const [loading, setLoading] = useState(false);
-  const departments = [{ _id: 1, name: "Tech" }];
-  const designations = [{ _id: 1, name: "Manager" }];
+  const [departments, setDepartments] = useState([]);
+  const designations = [
+    { _id: 1, name: "Manager" },
+    { _id: 2, name: "Senior Manager" },
+    { _id: 3, name: "Assistant Manager" },
+    { _id: 4, name: "Software Engineer" },
+    { _id: 5, name: "Sales Executive" },
+    { _id: 6, name: "HR Specialist" },
+    { _id: 7, name: "Accountant" },
+    { _id: 8, name: "Intern" },
+    { _id: 9, name: "Team Lead" },
+    { _id: 10, name: "Director" },
+  ];
+
   const formRef = useRef(null);
   const [defaultDate, setDefaultDate] = useState("");
   const [today, setToday] = useState("");
@@ -112,6 +124,18 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     };
   }, [onClose]);
 
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/department/`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.departments) setDepartments(data.departments);
+        else {
+          setDepartments([]);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   function handleChange(e) {
     setForm((prev) => ({
       ...prev,
@@ -128,7 +152,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
       email: form.email,
       phone: form.phone,
       dob: form.dob,
-      department: form.department,
+      department: form.department || { _id: "", name: "" },
       designation: form.designation,
       hireDate: form.hireDate,
       salary: {
@@ -249,14 +273,23 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
                 id="department"
                 name="department"
                 className="border border-gray-300 rounded-lg py-1 px-3"
-                value={form.department}
-                onChange={handleChange}
-                required
+                value={form.department?._id}
+                onChange={(e) => {
+                  const depId = e.target.value;
+                  const selectedDep = departments.find(
+                    (dep) => dep?._id === depId
+                  );
+                  setForm({
+                    ...form,
+                    department:
+                      { _id: selectedDep._id, name: selectedDep.name } || null, // ✅ store full object if you want
+                  });
+                }}
               >
                 <option value="">Select Department</option>
                 {departments.map((dep) => (
-                  <option key={dep._id} value={dep.name}>
-                    {dep.name}
+                  <option key={dep?._id} value={dep?._id}>
+                    {dep?.name}
                   </option>
                 ))}
               </select>

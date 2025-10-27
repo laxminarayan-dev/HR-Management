@@ -25,6 +25,19 @@ route.get("/allusers", async (req, res) => {
 
 
 })
+route.get("/detail/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await userModel.findOne({ _id: id });
+        if (!user) {
+            return res.status(404).json({ message: "no user found" });
+        }
+        return res.status(200).json({ message: "user found", user });
+    } catch (error) {
+        console.error("User load error:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
 route.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
     try {

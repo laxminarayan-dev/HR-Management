@@ -94,7 +94,7 @@ const Dashboard = () => {
     },
   ];
   return (
-    <section className="max-w-7xl m-auto flex flex-col gap-5">
+    <section className="max-w-7xl m-auto flex flex-col gap-5 px-10 py-8">
       <div>
         <h1 className="text-3xl font-semibold"> Dashboard</h1>
         <h2 className="text-md">

@@ -61,7 +61,7 @@ const DetailTableRow = ({ data, generateEmpId }) => {
       <span className="flex-1 flex items-center truncate">{data.fullName}</span>
       <span className="flex-1 flex items-center">{data.phone}</span>
       <span className="flex-1 hidden sm:flex items-center">
-        {data.department}
+        {data.department?.name}
       </span>
       <span className="flex-1 hidden sm:flex items-center">
         {data.designation}

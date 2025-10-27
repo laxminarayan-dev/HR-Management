@@ -17,7 +17,8 @@ const employeeSchema = new mongoose.Schema({
         type: Date
     },
     department: {
-        type: String
+        _id: { type: mongoose.Schema.Types.ObjectId, },
+        name: { type: String }
     },
     designation: {
         type: String
@@ -70,4 +71,7 @@ const employeeSchema = new mongoose.Schema({
 
 const EmpModel = mongoose.model("Employee", employeeSchema, "employeesInfo");
 
-module.exports = EmpModel;
+module.exports = {
+    EmpModel,
+    employeeSchema,
+};

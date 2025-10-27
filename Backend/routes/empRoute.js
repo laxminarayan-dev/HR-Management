@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router()
-const EmpModel = require("../models/EmpModel")
+const { EmpModel } = require("../models/EmpModel")
 
 route.get("/allEmployees", async (req, res) => {
     try {
