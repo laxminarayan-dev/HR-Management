@@ -28,6 +28,7 @@ route.get("/", async (req, res) => {
         res.status(500).json({ message: "Internal server error 11" });
     }
 })
+
 // 1. Add Department
 route.post("/add", async (req, res) => {
     try {
