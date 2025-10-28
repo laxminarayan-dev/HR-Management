@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router()
-const userModel = require("../models/userModel")
+const userModel = require("../models/userModel");
+const { EmpModel } = require("../models/EmpModel");
 
 route.get("/allusers", async (req, res) => {
     try {
@@ -38,30 +39,27 @@ route.get("/detail/:id", async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 });
-route.post("/register", async (req, res) => {
-    const { name, email, password } = req.body;
+route.post("/add", async (req, res) => {
     try {
-        const user = await userModel.findOne({ email: email })
+        const user = await userModel.findOne({ _id: req.body._id })
         if (user === null) {
             try {
-                const user = new userModel({
-                    id: generateUserId(),
-                    name: name,
-                    password: password,
-                    email: email,
-                })
+                const user = new userModel({ ...req.body, isAdmin: true })
                 await user.save()
+                await EmpModel.findByIdAndUpdate(user._id, { isAdmin: true })
+                const users = await userModel.find()
                 res.status(200).send({
-                    message: "User Data saved successfully"
+                    message: "Admin added Successfully.",
+                    users
                 })
             } catch (error) {
                 res.status(500).send({
-                    message: "Failed to save User Data "
+                    message: "Failed to add Admin!"
                 })
             }
         } else {
             res.status(401).send({
-                "message": "user already created"
+                "message": "Admin already exist"
             })
         }
 
@@ -71,5 +69,44 @@ route.post("/register", async (req, res) => {
         })
     }
 
+})
+
+route.delete("/:id", async (req, res) => {
+    const id = req.params.id;
+    try {
+        const user = await userModel.findById(id);
+        await EmpModel.findByIdAndUpdate(id, { isAdmin: false })
+        if (!user) {
+            return res.status(404).json({
+                message: "No User Found!"
+            });
+        }
+
+        if (user && user.email == "root@hrf.com") {
+            return res.status(403).json({
+                message: "Deletion not allowed!"
+            });
+        }
+
+        // Delete the user
+        const deletedUser = await userModel.findByIdAndDelete(id);
+        if (!deletedUser) {
+            return res.status(400).json({
+                message: "User Deletion Unsuccessful!"
+            });
+        }
+
+        const remainingUser = await userModel.find()
+
+        res.status(200).json({
+            message: "User Deletion Successful!",
+            remainingUser
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal Server Error!"
+        });
+    }
 })
 module.exports = route

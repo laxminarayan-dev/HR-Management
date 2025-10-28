@@ -62,12 +62,23 @@ export default function EmployeeDetail() {
     })
       .then((res) => {
         if (res.ok) {
-          setLoading(false);
           navigate("/employees");
+          setResponse({
+            success: true,
+            msg: "Deletion Complete Successfully.",
+          });
+        } else {
+          setResponse({ success: true, msg: "Deletion Unsuccessful!" });
         }
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setResponse(null);
+          setLoading(false);
+        }, 2000);
       });
   }
 

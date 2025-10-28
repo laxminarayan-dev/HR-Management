@@ -42,43 +42,21 @@ route.get("/detail/:id", async (req, res) => {
 
 route.post("/add", async (req, res) => {
 
-    const { fullName, email, phone, dob, department, designation, hireDate, salary, leaves, status, address } = req.body;
     try {
-        const emp = await EmpModel.findOne({ email: email })
+        const emp = await EmpModel.findOne({ email: req.body.email })
 
         if (emp === null) {
-            try {
-                const emp = new EmpModel({
-                    fullName: fullName,
-                    email: email,
-                    phone: phone,
-                    dob: dob,
-                    department: department,
-                    designation: designation,
-                    hireDate: hireDate,
-                    salary: {
-                        basic: salary.basic,
-                        bonus: salary.bonus,
-                    },
-                    leaves: {
-                        totalLeaves: leaves.totalLeaves,
-                        leavesTaken: leaves.leavesTaken,
-                        leavesRemaining: leaves.leavesRemaining,
-                    },
-                    status: status,
-                    address: {
-                        line1: address.line1,
-                        line2: address.line2,
-                        city: address.city,
-                        state: address.state,
-                        postalCode: address.postalCode,
-                        country: address.country,
-                    },
-                })
-                console.log(emp);
+            // ✅ Generate default password
+            const namePart = req.body.fullName?.substring(0, 3).toLowerCase() || "emp";
+            const phonePart = req.body.phone?.substring(0, 4) || "0000";
+            const rawPassword = `${namePart}@${phonePart}`;
 
+            try {
+                const emp = new EmpModel({ ...req.body, password: rawPassword })
                 await emp.save()
                 const emps = await EmpModel.find()
+                console.log(emps);
+
                 res.status(200).send({
                     emps: emps,
                     message: "Emp Data saved successfully"

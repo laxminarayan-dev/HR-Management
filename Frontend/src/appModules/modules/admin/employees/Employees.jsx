@@ -4,6 +4,7 @@ import EmployeeDetailTable from "../../../lib/tables/EmployeeDetailTable";
 const Employees = () => {
   const [emplist, setEmplist] = useState(null);
   const [addEmpModel, setAddEmpModel] = useState(false);
+  const [response, setResponse] = useState(null);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api/emp/allEmployees`, {
       method: "GET",
@@ -46,12 +47,19 @@ const Employees = () => {
       ) : (
         emplist.length > 0 && <EmployeeDetailTable tableData={emplist} />
       )}
-
+      {response && (
+        <div className="fixed z-100 top-20 right-8 transform -translate-x-1 bg-gray-800 p-4 rounded shadow-lg">
+          <p className={response.success ? "text-green-500" : "text-red-500"}>
+            {response.msg || "Default Message"}
+          </p>
+        </div>
+      )}
       {
         <AddEmployeeModal
           open={addEmpModel}
           onClose={setAddEmpModel}
           onAdd={setEmplist}
+          setResponse={setResponse}
         />
       }
     </div>
@@ -60,7 +68,7 @@ const Employees = () => {
 
 export default Employees;
 
-export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
+export const AddEmployeeModal = ({ open, onClose, onAdd, setResponse }) => {
   const initialData = {
     id: "",
     fullName: "",
@@ -97,7 +105,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
     { _id: 9, name: "Team Lead" },
     { _id: 10, name: "Director" },
   ];
-
+  // const [response, setResponse] = useState(null);
   const formRef = useRef(null);
   const [defaultDate, setDefaultDate] = useState("");
   const [today, setToday] = useState("");
@@ -151,10 +159,10 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
       fullName: form.fullName,
       email: form.email,
       phone: form.phone,
-      dob: form.dob,
-      department: form.department || { _id: "", name: "" },
+      dob: form.dob || defaultDate,
+      department: form.department,
       designation: form.designation,
-      hireDate: form.hireDate,
+      hireDate: form.hireDate || today,
       salary: {
         basic: Number(form.salaryBasic),
         bonus: Number(form.salaryBonus),
@@ -183,16 +191,28 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
       },
       body: JSON.stringify(empData),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((data) => {
+        console.log(data);
+
         if (data.emps) {
           onAdd(data.emps);
           setForm(initialData);
           onClose(false);
-          setLoading(false);
+          setResponse({ success: true, msg: data.message });
+        } else {
+          setResponse({ success: false, msg: data.message });
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false);
+          setResponse(null);
+        }, 2000);
+      });
     // end api
   }
 
@@ -456,6 +476,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd }) => {
                     className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                     value={form[field.id]}
                     onChange={handleChange}
+                    required
                   />
                 </div>
               ))}

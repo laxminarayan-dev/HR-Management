@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import DepartmentDetailTable from "../../../lib/tables/DepartmentDetailTable ";
 const Departments = () => {
   const [deptList, setDeptList] = useState(null);
+  const [response, setResponse] = useState(null);
   const [addDeptModal, setAddDeptModal] = useState(false);
 
   useEffect(() => {
@@ -44,12 +45,19 @@ const Departments = () => {
       ) : (
         deptList.length > 0 && <DepartmentDetailTable tableData={deptList} />
       )}
-
+      {response && (
+        <div className="fixed z-100 top-20 right-8 transform -translate-x-1 bg-gray-800 p-4 rounded shadow-lg">
+          <p className={response.success ? "text-green-500" : "text-red-500"}>
+            {response.msg || "Default Message"}
+          </p>
+        </div>
+      )}
       {
         <AddDepartmentModal
           open={addDeptModal}
           onClose={setAddDeptModal}
           onAdd={setDeptList}
+          setResponse={setResponse}
         />
       }
     </div>
@@ -58,7 +66,7 @@ const Departments = () => {
 
 export default Departments;
 
-export const AddDepartmentModal = ({ open, onClose, onAdd }) => {
+export const AddDepartmentModal = ({ open, onClose, onAdd, setResponse }) => {
   const initialData = {
     name: "",
     description: "",
@@ -140,12 +148,20 @@ export const AddDepartmentModal = ({ open, onClose, onAdd }) => {
           onAdd(data.departments);
           setForm(initialData);
           onClose(false);
+          setResponse({ success: true, msg: data.message });
+        } else {
+          setResponse({ success: false, msg: data.message });
         }
-        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
         setLoading(false);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setResponse(null);
+          setLoading(false);
+        }, 2000);
       });
   };
 

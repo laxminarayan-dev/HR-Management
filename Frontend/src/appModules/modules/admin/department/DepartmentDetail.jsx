@@ -69,12 +69,20 @@ export default function DepartmentDetail() {
     })
       .then((res) => {
         if (res.ok) {
-          setLoading(false);
           navigate("/departments");
+          setResponse({ success: true, msg: "Deletion Successful." });
+        } else {
+          setResponse({ success: false, msg: "Deletion Unsuccessful!" });
         }
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setLoading(false);
+          setResponse(null);
+        }, 2000);
       });
   }
   if (loading || department == null) {

@@ -13,6 +13,9 @@ const employeeSchema = new mongoose.Schema({
     phone: {
         type: String
     },
+    password: {
+        type: String
+    },
     dob: {
         type: Date
     },
@@ -22,6 +25,10 @@ const employeeSchema = new mongoose.Schema({
     },
     designation: {
         type: String
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
     hireDate: {
         type: Date,
