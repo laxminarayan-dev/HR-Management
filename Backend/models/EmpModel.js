@@ -46,7 +46,10 @@ const employeeSchema = new mongoose.Schema({
         currency: {
             type: String,
             default: "INR"
-        }
+        },
+        proccessed: { type: Number, default: 0 },
+        due: { type: Number },
+        lastProccessedMonth: { type: Date }
     },
     leaves: {
         totalLeaves: {

@@ -11,7 +11,7 @@ import EmployeeDetail from "./appModules/modules/admin/employees/EmployeeDetail"
 import Department from "./appModules/modules/admin/department/Department";
 import DepartmentDetail from "./appModules/modules/admin/department/DepartmentDetail";
 import Leaves from "./appModules/modules/admin/Leaves";
-import Salary from "./appModules/modules/admin/Salary";
+import Salary from "./appModules/modules/admin/salary/Salary";
 import Users from "./appModules/modules/admin/User/Users";
 
 const App = () => {
