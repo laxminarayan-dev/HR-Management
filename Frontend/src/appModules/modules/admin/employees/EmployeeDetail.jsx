@@ -157,7 +157,7 @@ export default function EmployeeDetail() {
 
             <div className="bg-gray-50 rounded-xl pb-4">
               <h3 className="text-md font-semibold text-gray-700 mb-2">
-                Compensation
+                Salary
               </h3>
               <div className="flex flex-col gap-1">
                 <div>
@@ -169,7 +169,11 @@ export default function EmployeeDetail() {
                 </div>
                 <div>
                   <span className="text-gray-600">Bonus:</span>{" "}
-                  <span>{employee.salary.bonus.toLocaleString()}</span>
+                  <span>
+                    {employee.salary.bonus
+                      ? employee.salary.bonus.toLocaleString()
+                      : "N/A"}
+                  </span>
                 </div>
               </div>
             </div>

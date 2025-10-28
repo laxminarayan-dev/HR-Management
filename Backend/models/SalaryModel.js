@@ -37,7 +37,8 @@ const salarySchema = new mongoose.Schema({
             default: "INR"
         },
         proccessed: { type: Number, default: 0 },
-        due: { type: Number },
+        bonusProccessed: { type: Number, default: 0 },
+        due: { type: Number, default: 0 },
         lastProccessedMonth: { type: Date }
     },
 });

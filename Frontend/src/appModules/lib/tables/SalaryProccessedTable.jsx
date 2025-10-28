@@ -1,15 +1,20 @@
 import { Edit, Trash2, FileText } from "lucide-react";
 
-function SalaryProccessedTable({ ProccesedSalaryData }) {
+function SalaryProccessedTable({
+  ProccesedSalaryData,
+  calculatePendingSalary,
+}) {
   return (
     <table className="min-w-full border-collapse bg-white">
       <thead className="bg-gray-100 text-gray-700 text-sm uppercase font-semibold">
         <tr>
           <th className="py-3 px-4 text-left">Employee</th>
           <th className="py-3 px-4 text-left">Department</th>
-          <th className="py-3 px-4 text-left">Basic</th>
+          <th className="py-3 px-4 text-left">Salary</th>
           <th className="py-3 px-4 text-left">Bonus</th>
-          <th className="py-3 px-4 text-left">Total</th>
+          <th className="py-3 px-4 text-left truncate">Processed Salary</th>
+          <th className="py-3 px-4 text-left truncate">Processed Bonus</th>
+          <th className="py-3 px-4 text-left truncate">Due Salary</th>
           <th className="py-3 px-4 text-left">Month</th>
           <th className="py-3 px-4 text-center">Actions</th>
         </tr>
@@ -22,17 +27,43 @@ function SalaryProccessedTable({ ProccesedSalaryData }) {
               className="border-t hover:bg-gray-50 transition-colors"
             >
               <td className="py-3 px-4 font-medium truncate">{sal.fullName}</td>
-              <td className="py-3 px-4 truncate">{sal.department}</td>
+              <td className="py-3 px-4 truncate">
+                {sal.department?.name || "N/A"}
+              </td>
               <td className="py-3 px-4">
                 ₹{sal.salary.basic.toLocaleString()}
               </td>
               <td className="py-3 px-4">
-                ₹{sal.salary.bonus.toLocaleString()}
+                {sal.salary.bonus ? (
+                  <>₹{sal.salary.bonus.toLocaleString()}</>
+                ) : (
+                  "N/A"
+                )}
               </td>
               <td className="py-3 px-4 font-semibold">
-                ₹{(sal.salary.basic + sal.salary.bonus).toLocaleString()}
+                ₹{sal.salary.proccessed.toLocaleString()}
               </td>
-              <td className="py-3 px-4 truncate">{sal.month}</td>
+              <td className="py-3 px-4 font-semibold">
+                {sal.salary.bonusProccessed ? (
+                  <>₹{sal.salary.bonusProccessed.toLocaleString()}</>
+                ) : (
+                  "N/A"
+                )}
+              </td>
+              <td className="py-3 px-4 font-semibold">
+                ₹{calculatePendingSalary(sal)}
+              </td>
+              <td className="py-3 px-4 truncate">
+                {sal.salary.lastProccessedMonth
+                  ? new Date(sal.salary.lastProccessedMonth).toLocaleString(
+                      "default",
+                      {
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )
+                  : "N/A"}
+              </td>
               <td className="py-3 px-4 flex justify-center gap-3">
                 <button className="text-red-500 hover:text-red-400">
                   <Trash2 size={18} />

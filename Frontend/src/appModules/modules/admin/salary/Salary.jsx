@@ -38,85 +38,13 @@ function calculatePendingSalary(emp) {
 }
 
 export default function Salary() {
-  const demoSalaryData = [
-    {
-      fullName: "Amit Sharma",
-      email: "amit.sharma@office.com",
-      department: "Engineering",
-      salary: { basic: 45000, bonus: 5000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Priya Verma",
-      email: "priya.verma@office.com",
-      department: "Human Resources",
-      salary: { basic: 40000, bonus: 3000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Rohit Singh",
-      email: "rohit.singh@office.com",
-      department: "Finance",
-      salary: { basic: 55000, bonus: 8000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Neha Gupta",
-      email: "neha.gupta@college.edu",
-      department: "Administration",
-      salary: { basic: 38000, bonus: 2000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Karan Mehta",
-      email: "karan.mehta@office.com",
-      department: "Engineering",
-      salary: { basic: 48000, bonus: 4500 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Simran Kaur",
-      email: "simran.kaur@college.edu",
-      department: "Teaching",
-      salary: { basic: 42000, bonus: 5000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Deepak Patel",
-      email: "deepak.patel@office.com",
-      department: "Marketing",
-      salary: { basic: 47000, bonus: 4000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Anjali Mishra",
-      email: "anjali.mishra@office.com",
-      department: "Finance",
-      salary: { basic: 53000, bonus: 7000 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Suresh Reddy",
-      email: "suresh.reddy@college.edu",
-      department: "Administration",
-      salary: { basic: 39000, bonus: 2500 },
-      month: "October 2025",
-    },
-    {
-      fullName: "Pooja Yadav",
-      email: "pooja.yadav@office.com",
-      department: "Sales",
-      salary: { basic: 46000, bonus: 5500 },
-      month: "October 2025",
-    },
-  ];
-
-  const [salaries, setSalaries] = useState(demoSalaryData);
+  const [entries, setEntries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [response, setResponse] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const [emps, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [filteredEntries, setFilteredEntries] = useState([]);
   const [showAddSalaryModal, setShowAddSalaryModal] = useState(false);
 
   const fetchEmployee = () => {
@@ -135,25 +63,69 @@ export default function Salary() {
       })
       .catch((err) => console.log(err));
   };
+
+  const fetchEntries = () => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api/salary/`, {
+      method: "GET",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        if (data.salaryEntries) {
+          setEntries(data.salaryEntries.reverse());
+        } else {
+          setEntries([]);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     fetchEmployee();
+    fetchEntries();
   }, []);
 
-  const filteredSalaries = salaries.filter(
-    (emp) =>
-      emp.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      emp.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    if (!entries) return;
+
+    const filterData = entries.filter((entry) => {
+      const searchMatch =
+        entry?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry?.email?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return searchMatch; // ✅ new filter condition
+    });
+
+    setFilteredEntries(filterData);
+  }, [entries, searchTerm]);
 
   useEffect(() => {
     if (!emps) return;
-    let filterData = emps.filter(
-      (emp) =>
-        (emp?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          emp?.email?.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        calculatePendingSalary(emp) !== 0
-    );
-    setFilteredEmployees([...filterData]);
+
+    const filterData = emps.filter((emp) => {
+      const searchMatch =
+        emp?.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        emp?.email?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const pendingSalary = calculatePendingSalary(emp);
+
+      // --- hire date check ---
+      const hireDate = new Date(emp.hireDate); // assuming `hireDate` field in employee
+      const today = new Date();
+
+      // difference in days
+      const diffInDays = Math.floor((today - hireDate) / (1000 * 60 * 60 * 24));
+
+      // include only if employee has worked for at least 30 days
+      const workedMoreThan30Days = diffInDays >= 30;
+
+      return (
+        searchMatch && pendingSalary !== 0 && workedMoreThan30Days // ✅ new filter condition
+      );
+    });
+
+    setFilteredEmployees(filterData);
   }, [emps, searchTerm]);
 
   return (
@@ -186,7 +158,10 @@ export default function Salary() {
 
       <div className="bg-slate-200 px-2 py-2 mx-auto w-fit rounded-full gap-4 flex">
         <button
-          onClick={() => setSelectedTab(0)}
+          onClick={() => {
+            setSelectedTab(0);
+            fetchEmployee();
+          }}
           className={`${
             selectedTab == 0 && "bg-black text-white"
           }   rounded-full px-4 py-2`}
@@ -194,7 +169,10 @@ export default function Salary() {
           Dues
         </button>
         <button
-          onClick={() => setSelectedTab(1)}
+          onClick={() => {
+            setSelectedTab(1);
+            fetchEntries();
+          }}
           className={`${
             selectedTab == 1 && "bg-black text-white"
           }   rounded-full px-4 py-2`}
@@ -211,7 +189,10 @@ export default function Salary() {
             calculatePendingSalary={calculatePendingSalary}
           />
         ) : (
-          <SalaryProccessedTable ProccesedSalaryData={filteredSalaries} />
+          <SalaryProccessedTable
+            ProccesedSalaryData={filteredEntries}
+            calculatePendingSalary={calculatePendingSalary}
+          />
         )}
       </div>
 
@@ -246,7 +227,7 @@ export const AddSalaryModel = ({
     proccessed: "",
     bonus: "",
     currency: "INR",
-    lastProccessedMonth: new Date().toISOString(),
+    lastProccessedMonth: new Date().toISOString(), // this is here because this value go to default month selector
   });
 
   async function handleAddSalary() {
@@ -254,7 +235,6 @@ export const AddSalaryModel = ({
       alert("Please fill required fields");
       return;
     }
-
     const filterEmp = emps.filter((emp) => emp._id === selectedEmp)[0];
     const dueCalc = calculatePendingSalary(filterEmp) - newSalary.proccessed;
 
@@ -297,34 +277,56 @@ export const AddSalaryModel = ({
       });
 
     // ==========================================================================
-    // try {
-    //   const res = await fetch(
-    //     `${import.meta.env.VITE_BACKEND_URL}/api/salary/add`,
-    //     {
-    //       method: "POST",
-    //       headers: { "Content-Type": "application/json" },
-    //       body: JSON.stringify(newSalary),
-    //     }
-    //   );
+    try {
+      const salaryEntry = {
+        fullName: filterEmp.fullName,
+        email: filterEmp.email,
+        phone: filterEmp.phone,
+        department: filterEmp.department,
+        designation: filterEmp.designation,
+        hireDate: filterEmp.hireDate,
+        salary: {
+          basic: filterEmp.salary.basic,
+          bonus: filterEmp.salary.bonus,
+          currency: filterEmp.salary.currency,
+          proccessed: newSalary.proccessed,
+          bonusProccessed: newSalary.bonus,
+          due: dueCalc,
+          lastProccessedMonth: newSalary.lastProccessedMonth,
+        },
+      };
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/salary/add`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(salaryEntry),
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        setResponse({ success: true, msg: "Salary Entry added successfully!" });
+      } else {
+        setResponse({ success: false, msg: "Failed to add Salary Entry!" });
+      }
 
-    //   const data = await res.json();
-    //   if (data.success) {
-    //     alert("Salary added successfully!");
-    //     setShowAddSalaryModal(false);
-    //     setNewSalary({
-    //       empId: "",
-    //       basic: "",
-    //       bonus: "",
-    //       currency: "INR",
-    //       lastProcessedMonth: "",
-    //     });
-    //   } else {
-    //     alert(data.message || "Failed to add salary");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   alert("Error adding salary");
-    // }
+      setShowAddSalaryModal(false);
+      setNewSalary({
+        proccessed: "",
+        bonus: "",
+        currency: "INR",
+        lastProccessedMonth: new Date().toISOString(), // this is here because this value go to default month selector
+      });
+      setTimeout(() => {
+        setResponse(null);
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+      setResponse({ success: false, msg: "Failed to add Salary Entry!" });
+      setTimeout(() => {
+        setResponse(null);
+      }, 1000);
+    }
   }
 
   return (

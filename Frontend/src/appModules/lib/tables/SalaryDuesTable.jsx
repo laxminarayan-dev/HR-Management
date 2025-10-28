@@ -1,4 +1,3 @@
-import { Pen } from "lucide-react";
 function SalaryDuesTable({ emps, calculatePendingSalary }) {
   return (
     <table className="min-w-full border-collapse bg-white">
@@ -24,7 +23,7 @@ function SalaryDuesTable({ emps, calculatePendingSalary }) {
             >
               <td className="py-3 px-4 font-medium truncate">{emp.fullName}</td>
               <td className="py-3 px-4 truncate">
-                {emp.department?.name || "Null"}
+                {emp.department?.name || "N/A"}
               </td>
               <td className="py-3 px-4">
                 ₹{emp.salary.basic.toLocaleString()}
@@ -37,13 +36,15 @@ function SalaryDuesTable({ emps, calculatePendingSalary }) {
                 ₹{calculatePendingSalary(emp)}
               </td>
               <td className="py-3 px-4">
-                {new Date(emp.salary.lastProccessedMonth).toLocaleString(
-                  "default",
-                  {
-                    month: "short",
-                    year: "numeric",
-                  }
-                )}
+                {emp.salary.lastProccessedMonth
+                  ? new Date(emp.salary.lastProccessedMonth).toLocaleString(
+                      "default",
+                      {
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )
+                  : "N/A"}
               </td>
             </tr>
           ))

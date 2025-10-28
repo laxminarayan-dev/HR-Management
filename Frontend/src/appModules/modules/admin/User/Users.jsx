@@ -358,7 +358,7 @@ export const AddUserModal = ({ open, onClose, onAdd, setResponse }) => {
                           <div className="flex gap-3 text-sm text-slate-500">
                             <h1>
                               {emp.department == "" || !emp.department
-                                ? "Null"
+                                ? "N/A"
                                 : emp.department.name}
                               {" : "}
                             </h1>
