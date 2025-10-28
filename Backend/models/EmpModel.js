@@ -48,7 +48,7 @@ const employeeSchema = new mongoose.Schema({
             default: "INR"
         },
         proccessed: { type: Number, default: 0 },
-        due: { type: Number },
+        due: { type: Number, default: 0 },
         lastProccessedMonth: { type: Date }
     },
     leaves: {
