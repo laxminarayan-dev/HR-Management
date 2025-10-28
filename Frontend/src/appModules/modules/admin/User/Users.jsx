@@ -359,7 +359,7 @@ export const AddUserModal = ({ open, onClose, onAdd, setResponse }) => {
                             <h1>
                               {emp.department == "" || !emp.department
                                 ? "Null"
-                                : emp.department}
+                                : emp.department.name}
                               {" : "}
                             </h1>
                             <h1>{emp.designation}</h1>
