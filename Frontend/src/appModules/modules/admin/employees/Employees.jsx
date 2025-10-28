@@ -293,7 +293,7 @@ export const AddEmployeeModal = ({ open, onClose, onAdd, setResponse }) => {
                 id="department"
                 name="department"
                 className="border border-gray-300 rounded-lg py-1 px-3"
-                value={form.department?._id}
+                value={form.department?._id || ""}
                 onChange={(e) => {
                   const depId = e.target.value;
                   const selectedDep = departments.find(
@@ -302,7 +302,8 @@ export const AddEmployeeModal = ({ open, onClose, onAdd, setResponse }) => {
                   setForm({
                     ...form,
                     department:
-                      { _id: selectedDep._id, name: selectedDep.name } || null, // ✅ store full object if you want
+                      { _id: selectedDep?._id, name: selectedDep?.name } ||
+                      null, // ✅ store full object if you want
                   });
                 }}
               >
