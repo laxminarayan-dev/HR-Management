@@ -240,7 +240,7 @@ export const AddUserModal = ({ open, onClose, onAdd, setResponse }) => {
                         htmlFor="salaryBasic"
                         className="text-sm font-medium text-gray-700"
                       >
-                        Basic Salary <span className="text-red-500">*</span>
+                        Basic Salary
                       </label>
                       <h1>{admin.salary.basic}</h1>
                     </div>
