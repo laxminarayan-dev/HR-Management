@@ -577,7 +577,6 @@ export const UpdateEmployeeModal = ({
                       { _id: selectedDep._id, name: selectedDep.name } || null, // ✅ store full object if you want
                   });
                 }}
-                required
               >
                 <option value="">Select Department</option>
                 {departments.map((dep) => (
