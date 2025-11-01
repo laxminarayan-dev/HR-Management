@@ -79,6 +79,9 @@ export const AddEmployeeModal = ({ open, onClose, onAdd, setResponse }) => {
     designation: "",
     salaryBasic: "",
     salaryBonus: "",
+    bankName: "",
+    bankIFSC: "",
+    bankAccount: "",
     leavesTotal: 24,
     leavesTaken: 0,
     status: "Active",
@@ -166,6 +169,29 @@ export const AddEmployeeModal = ({ open, onClose, onAdd, setResponse }) => {
       salary: {
         basic: Number(form.salaryBasic),
         bonus: Number(form.salaryBonus),
+        allowance: {
+          houseRentAllowances: 10000,
+          conveyanceAllowances: 4000,
+          medicalAllowances: 5000,
+          specialAllowances: 1000,
+        },
+        currency: "INR",
+        proccessed: 0,
+        due: 0,
+        lastProccessed: 0,
+        lastDue: 0,
+        lastProcessedMonth: new Date().toISOString().replace("Z", "+00:00"),
+        deduction: {
+          epf: 2000,
+          healthInsurance: 1000,
+          professionalInsurance: 1000,
+          tds: (Number(form.salaryBasic) * 0.03).toFixed(2),
+        },
+      },
+      bank: {
+        name: form.bankName,
+        ifsc: form.bankIFSC,
+        account: form.bankAccount,
       },
       leaves: {
         totalLeaves: Number(form.leavesTotal),
@@ -390,6 +416,66 @@ export const AddEmployeeModal = ({ open, onClose, onAdd, setResponse }) => {
                   className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.salaryBonus}
                   onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            {/* Bank */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* Bank Name*/}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="bankName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Bank Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="bankName"
+                  name="bankName"
+                  type="text"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={form.bankName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* Bank IFSC */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="bankIFSC"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  IFSC Code <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="bankIFSC"
+                  name="bankIFSC"
+                  type="text"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={form.bankIFSC}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* Bank Account */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="bankAccount"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Account Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="bankAccount"
+                  name="bankAccount"
+                  type="text"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={form.bankAccount}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>

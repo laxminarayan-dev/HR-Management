@@ -268,6 +268,9 @@ export const UpdateEmployeeModal = ({
     status: initialData.status,
     salaryBasic: initialData.salary.basic,
     salaryBonus: initialData.salary.bonus,
+    bankName: initialData.bank.name,
+    bankIFSC: initialData.bank.ifsc,
+    bankAccount: initialData.bank.account,
     leavesTotal: initialData.leaves.totalLeaves,
     leavesTaken: initialData.leaves.leavesTaken,
     addressLine1: initialData.address.line1,
@@ -358,6 +361,9 @@ export const UpdateEmployeeModal = ({
       status: initialData.status,
       salaryBasic: initialData.salary.basic,
       salaryBonus: initialData.salary.bonus,
+      bankName: initialData.bank.name,
+      bankIFSC: initialData.bank.ifsc,
+      bankAccount: initialData.bank.account,
       leavesTotal: initialData.leaves.totalLeaves,
       leavesTaken: initialData.leaves.leavesTaken,
       addressLine1: initialData.address.line1,
@@ -420,6 +426,24 @@ export const UpdateEmployeeModal = ({
       salary: {
         basic: Number(form.salaryBasic),
         bonus: Number(form.salaryBonus),
+        allowance: initialData.salary.allowance,
+        currency: "INR",
+        proccessed: initialData.salary.proccessed,
+        due: initialData.salary.due,
+        lastProccessed: initialData.lastProccessed,
+        lastDue: initialData.salary.lastDue,
+        lastProcessedMonth: initialData.salary.lastProcessedMonth,
+        deduction: {
+          epf: 2000,
+          healthInsurance: 1000,
+          professionalInsurance: 1000,
+          tds: (Number(form.salaryBasic) * 0.03).toFixed(2),
+        },
+      },
+      bank: {
+        name: form.bankName,
+        ifsc: form.bankIFSC,
+        account: form.bankAccount,
       },
       leaves: {
         totalLeaves: Number(form.leavesTotal),
@@ -665,6 +689,66 @@ export const UpdateEmployeeModal = ({
                   className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   value={form.salaryBonus}
                   onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            {/* Bank */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {/* Bank Name*/}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="bankName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Bank Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="bankName"
+                  name="bankName"
+                  type="text"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={form.bankName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* Bank IFSC */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="bankIFSC"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  IFSC Code <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="bankIFSC"
+                  name="bankIFSC"
+                  type="text"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={form.bankIFSC}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              {/* Bank Account */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="bankAccount"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Account Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="bankAccount"
+                  name="bankAccount"
+                  type="text"
+                  className="border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                  value={form.bankAccount}
+                  onChange={handleChange}
+                  required
                 />
               </div>
             </div>

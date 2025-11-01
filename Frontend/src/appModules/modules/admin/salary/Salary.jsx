@@ -2,38 +2,62 @@ import { useState, useEffect, Fragment } from "react";
 import { Search, Plus } from "lucide-react";
 import SalaryDuesTable from "../../../lib/tables/SalaryDuesTable";
 import SalaryProccessedTable from "../../../lib/tables/SalaryProccessedTable";
+
 function calculatePendingSalary(emp) {
+  console.log(emp.salary);
+  const {
+    conveyanceAllowances,
+    houseRentAllowances,
+    medicalAllowances,
+    specialAllowances,
+  } = emp.salary.allowance;
+  const { epf, healthInsurance, professionalInsurance, tds } =
+    emp.salary.deduction;
   const currentMonth = new Date().getMonth();
-  const { basic, due } = emp.salary;
-  const lastProccessedMonth = new Date(
+  const { basic, lastDue, lastProccessed } = emp.salary;
+  let lastProccessedMonth = new Date(
     emp.salary?.lastProccessedMonth
   ).getMonth();
 
+  let groccSalary =
+    basic +
+    conveyanceAllowances +
+    houseRentAllowances +
+    medicalAllowances +
+    specialAllowances;
+  let totalDeduction = epf + healthInsurance + professionalInsurance + tds;
+
+  let netPayble = groccSalary - totalDeduction;
+
   let totalDue = 0;
+
+  if (!lastProccessedMonth) {
+    lastProccessedMonth = new Date(emp.hireDate).getMonth();
+  }
 
   if (lastProccessedMonth !== currentMonth) {
     // CASE 1: Same year (e.g., Feb -> Dec)
     if (currentMonth > lastProccessedMonth) {
       for (let m = lastProccessedMonth; m < currentMonth; m++) {
-        if (m === lastProccessedMonth && due > 0) totalDue += due;
-        else totalDue += basic;
+        totalDue += netPayble;
       }
     }
     // CASE 2: Year rollover (e.g., Nov -> Feb)
     else {
       // Process remaining months of last year
       for (let m = lastProccessedMonth; m < 12; m++) {
-        if (m === lastProccessedMonth && due > 0) totalDue += due;
-        else totalDue += basic;
+        totalDue += netPayble;
       }
       // Then months of new year
       for (let m = 1; m < currentMonth; m++) {
-        totalDue += basic;
+        totalDue += netPayble;
       }
     }
-  } else if (lastProccessedMonth == currentMonth) {
-    totalDue += due;
+    totalDue += lastDue;
+  } else if (lastProccessedMonth === currentMonth) {
+    totalDue = lastDue - lastProccessed;
   }
+
   return totalDue;
 }
 
@@ -109,7 +133,6 @@ export default function Salary() {
         emp?.email?.toLowerCase().includes(searchTerm.toLowerCase());
 
       const pendingSalary = calculatePendingSalary(emp);
-
       // --- hire date check ---
       const hireDate = new Date(emp.hireDate); // assuming `hireDate` field in employee
       const today = new Date();
@@ -138,7 +161,7 @@ export default function Salary() {
           onClick={() => setShowAddSalaryModal(true)}
         >
           <Plus size={18} />
-          Add Salary
+          Pay Salary
         </button>
       </div>
 
@@ -177,12 +200,12 @@ export default function Salary() {
             selectedTab == 1 && "bg-black text-white"
           }   rounded-full px-4 py-2`}
         >
-          Proccessed
+          Pay Slips
         </button>
       </div>
 
       {/* Salary Table */}
-      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm max-w-6xl mx-auto">
+      <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm max-w-7xl mx-auto">
         {selectedTab == 0 ? (
           <SalaryDuesTable
             emps={filteredEmployees}
@@ -236,11 +259,37 @@ export const AddSalaryModel = ({
       return;
     }
     const filterEmp = emps.filter((emp) => emp._id === selectedEmp)[0];
-    const dueCalc = calculatePendingSalary(filterEmp) - newSalary.proccessed;
+    const lastDue = calculatePendingSalary(filterEmp);
+    const dueCalc = lastDue - newSalary.proccessed;
+
+    console.log(filterEmp);
 
     const updatedEmp = {
       ...filterEmp,
-      salary: { ...filterEmp.salary, ...newSalary, due: dueCalc },
+      salary: {
+        ...filterEmp.salary,
+        lastDue: lastDue,
+        due: 0,
+        lastProccessedMonth: newSalary.lastProccessedMonth,
+        lastProccessed: parseInt(newSalary.proccessed),
+      },
+    };
+
+    const paySlip = {
+      fullName: filterEmp.fullName,
+      email: filterEmp.email,
+      phone: filterEmp.phone,
+      department: filterEmp.department,
+      designation: filterEmp.designation,
+      hireDate: filterEmp.hireDate,
+      salary: {
+        ...filterEmp.salary,
+        bonusProccessed: newSalary.bonus,
+        due: dueCalc,
+        netPay: lastDue,
+        proccessed: newSalary.proccessed,
+      },
+      bank: { ...filterEmp.bank },
     };
 
     fetch(
@@ -278,29 +327,12 @@ export const AddSalaryModel = ({
 
     // ==========================================================================
     try {
-      const salaryEntry = {
-        fullName: filterEmp.fullName,
-        email: filterEmp.email,
-        phone: filterEmp.phone,
-        department: filterEmp.department,
-        designation: filterEmp.designation,
-        hireDate: filterEmp.hireDate,
-        salary: {
-          basic: filterEmp.salary.basic,
-          bonus: filterEmp.salary.bonus,
-          currency: filterEmp.salary.currency,
-          proccessed: newSalary.proccessed,
-          bonusProccessed: newSalary.bonus,
-          due: dueCalc,
-          lastProccessedMonth: newSalary.lastProccessedMonth,
-        },
-      };
       const res = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/api/salary/add`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(salaryEntry),
+          body: JSON.stringify(paySlip),
         }
       );
       const data = await res.json();
@@ -332,7 +364,7 @@ export const AddSalaryModel = ({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-lg space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Add Salary</h2>
+        <h2 className="text-xl font-semibold text-gray-800">Pay Salary</h2>
 
         <div className="space-y-3">
           <select
@@ -350,8 +382,8 @@ export const AddSalaryModel = ({
           {selectedEmp && (
             <Fragment>
               <div className="flex flex-col pl-1">
-                <label className="font-medium text-gray-700 text-md">
-                  Due Salary:
+                <label className=" text-gray-700 text-md pb-2 font-bold">
+                  Total Salary Payble:
                 </label>
                 <h1>
                   ₹
@@ -369,14 +401,14 @@ export const AddSalaryModel = ({
                     proccessed: e.target.value, // store full ISO back
                   })
                 }
-                placeholder="Salary to be Process"
+                placeholder="Salary to be Pay"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2"
                 required
               />
 
               <input
                 type="number"
-                placeholder="Bonus"
+                placeholder="Bonus Pay"
                 value={newSalary.bonus}
                 onChange={(e) =>
                   setNewSalary({

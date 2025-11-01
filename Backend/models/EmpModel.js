@@ -10,6 +10,11 @@ const employeeSchema = new mongoose.Schema({
         required: true,
         unique: true    // avoid duplicate employee emails
     },
+    bank: {
+        name: { type: String },
+        account: { type: String },
+        IFSC: { type: String }
+    },
     phone: {
         type: String
     },
@@ -34,22 +39,29 @@ const employeeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    bank: { name: { type: String, require }, ifsc: { type: String, require }, account: { type: Number, require } },
     salary: {
-        basic: {
-            type: Number,
-            required: true
+        basic: { type: Number, required: true },
+        bonus: { type: Number, default: 0 },
+        allowance: {
+            houseRentAllowances: { type: Number, default: 7000 },
+            conveyanceAllowances: { type: Number, default: 2000 },
+            medicalAllowances: { type: Number, default: 5000 },
+            specialAllowances: { type: Number, default: 0 },
         },
-        bonus: {
-            type: Number,
-            default: 0
-        },
-        currency: {
-            type: String,
-            default: "INR"
-        },
-        proccessed: { type: Number, default: 0 },
-        due: { type: Number, default: 0 },
-        lastProccessedMonth: { type: Date }
+        currency: { type: String, default: "INR" },
+        proccessed: {},
+        due: {},
+        lastProccessed: { type: Number, default: 0 },
+        lastDue: { type: Number, default: 0 },
+        lastProccessedMonth: { type: Date },
+
+        deduction: {
+            epf: { type: Number, default: 3000 },
+            healthInsurance: { type: Number, default: 3000 },
+            professionalInsurance: { type: Number, default: 2000 },
+            tds: { type: Number, default: 5000 },
+        }
     },
     leaves: {
         totalLeaves: {

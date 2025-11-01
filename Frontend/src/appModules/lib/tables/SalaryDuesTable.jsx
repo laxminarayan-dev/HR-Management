@@ -5,13 +5,14 @@ function SalaryDuesTable({ emps, calculatePendingSalary }) {
         <tr>
           <th className="py-3 px-4 text-left truncate">Employee</th>
           <th className="py-3 px-4 text-left truncate">Department</th>
-          <th className="py-3 px-4 text-left truncate">Salary</th>
-          <th className="py-3 px-4 text-left truncate">Last Proccessed</th>
+          <th className="py-3 px-4 text-left truncate">Basic</th>
+          <th className="py-3 px-4 text-left truncate">Allowances</th>
+          <th className="py-3 px-4 text-left truncate">Deductions</th>
+          <th className="py-3 px-4 text-left truncate">Gross Salary</th>
           <th className="py-3 px-4 text-left truncate">Last Dues</th>
-          <th className="py-3 px-4 text-left truncate">Total Due</th>
-          <th className="py-3 px-4 text-left truncate">
-            Last Salary Proccesed
-          </th>
+          <th className="py-3 px-4 text-left truncate">Last Paid</th>
+          <th className="py-3 px-4 text-left truncate">Last Paid Month</th>
+          <th className="py-3 px-4 text-left truncate">Total Payble</th>
         </tr>
       </thead>
       <tbody>
@@ -28,13 +29,42 @@ function SalaryDuesTable({ emps, calculatePendingSalary }) {
               <td className="py-3 px-4">
                 ₹{emp.salary.basic.toLocaleString()}
               </td>
-              <td className="py-3 px-4">
-                ₹{emp.salary.proccessed.toLocaleString()}
+              <td className="py-3 px-4 text-green-500">
+                ₹
+                {emp.salary.allowance.conveyanceAllowances +
+                  emp.salary.allowance.houseRentAllowances +
+                  emp.salary.allowance.medicalAllowances +
+                  emp.salary.allowance.specialAllowances}
               </td>
-              <td className="py-3 px-4">₹{emp.salary.due}</td>
-              <td className="py-3 px-4 font-semibold">
-                ₹{calculatePendingSalary(emp)}
+
+              <td className="py-3 px-4 text-red-400">
+                ₹
+                {emp.salary.deduction.epf +
+                  emp.salary.deduction.healthInsurance +
+                  emp.salary.deduction.professionalInsurance +
+                  emp.salary.deduction.tds}
               </td>
+
+              <td className="py-3 px-4 text-blue-400">
+                ₹
+                {emp.salary.allowance.conveyanceAllowances +
+                  emp.salary.allowance.houseRentAllowances +
+                  emp.salary.allowance.medicalAllowances +
+                  emp.salary.allowance.specialAllowances +
+                  emp.salary.basic -
+                  (emp.salary.deduction.epf +
+                    emp.salary.deduction.healthInsurance +
+                    emp.salary.deduction.professionalInsurance +
+                    emp.salary.deduction.tds)}
+              </td>
+
+              <td className="py-3 px-4 text-green-500">
+                ₹{emp.salary.lastDue}
+              </td>
+              <td className="py-3 px-4 text-red-500">
+                ₹{emp.salary?.lastProccessed || 0}
+              </td>
+
               <td className="py-3 px-4">
                 {emp.salary.lastProccessedMonth
                   ? new Date(emp.salary.lastProccessedMonth).toLocaleString(
@@ -45,6 +75,10 @@ function SalaryDuesTable({ emps, calculatePendingSalary }) {
                       }
                     )
                   : "N/A"}
+              </td>
+
+              <td className="py-3 px-4 font-bold text-blue-500">
+                ₹{calculatePendingSalary(emp)}
               </td>
             </tr>
           ))

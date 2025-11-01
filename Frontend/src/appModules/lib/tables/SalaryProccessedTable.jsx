@@ -1,22 +1,26 @@
 import { Edit, Trash2, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function SalaryProccessedTable({
   ProccesedSalaryData,
   calculatePendingSalary,
 }) {
+  const navigate = useNavigate();
+  const handlePrint = (emp) => {
+    navigate("/salaryPrint", { state: { emp } });
+  };
+
   return (
     <table className="min-w-full border-collapse bg-white">
       <thead className="bg-gray-100 text-gray-700 text-sm uppercase font-semibold">
         <tr>
           <th className="py-3 px-4 text-left">Employee</th>
           <th className="py-3 px-4 text-left">Department</th>
-          <th className="py-3 px-4 text-left">Salary</th>
-          <th className="py-3 px-4 text-left">Bonus</th>
-          <th className="py-3 px-4 text-left truncate">Processed Salary</th>
-          <th className="py-3 px-4 text-left truncate">Processed Bonus</th>
-          <th className="py-3 px-4 text-left truncate">Due Salary</th>
-          <th className="py-3 px-4 text-left">Month</th>
-          <th className="py-3 px-4 text-center">Actions</th>
+          <th className="py-3 px-4 text-left truncate">Last Payble</th>
+          <th className="py-3 px-4 text-left truncate">Last Paid</th>
+          <th className="py-3 px-4 text-left truncate">Last Paid Month</th>
+          <th className="py-3 px-4 text-left truncate">Due Balance</th>
+          <th className="py-3 px-4 text-center"></th>
         </tr>
       </thead>
       <tbody>
@@ -30,28 +34,18 @@ function SalaryProccessedTable({
               <td className="py-3 px-4 truncate">
                 {sal.department?.name || "N/A"}
               </td>
-              <td className="py-3 px-4">
-                ₹{sal.salary.basic.toLocaleString()}
+              <td className="py-3 px-4 text-blue-400">
+                ₹{sal.salary.netPay.toLocaleString()}
               </td>
-              <td className="py-3 px-4">
+              {/* <td className="py-3 px-4">
                 {sal.salary.bonus ? (
                   <>₹{sal.salary.bonus.toLocaleString()}</>
                 ) : (
                   "N/A"
                 )}
-              </td>
-              <td className="py-3 px-4 font-semibold">
+              </td> */}
+              <td className="py-3 px-4 font-semibold text-red-400">
                 ₹{sal.salary.proccessed.toLocaleString()}
-              </td>
-              <td className="py-3 px-4 font-semibold">
-                {sal.salary.bonusProccessed ? (
-                  <>₹{sal.salary.bonusProccessed.toLocaleString()}</>
-                ) : (
-                  "N/A"
-                )}
-              </td>
-              <td className="py-3 px-4 font-semibold">
-                ₹{calculatePendingSalary(sal)}
               </td>
               <td className="py-3 px-4 truncate">
                 {sal.salary.lastProccessedMonth
@@ -62,13 +56,18 @@ function SalaryProccessedTable({
                         year: "numeric",
                       }
                     )
-                  : "N/A"}
+                  : new Date(sal.hireDate).toLocaleString("default", {
+                      month: "short",
+                      year: "numeric",
+                    })}
               </td>
+              <td className="py-3 px-4 font-semibold">₹{sal.salary.due}</td>
+
               <td className="py-3 px-4 flex justify-center gap-3">
-                <button className="text-red-500 hover:text-red-400">
-                  <Trash2 size={18} />
-                </button>
-                <button className="text-green-500 hover:text-green-400">
+                <button
+                  className="text-green-500 hover:text-green-400"
+                  onClick={() => handlePrint(sal)}
+                >
                   <FileText size={18} />
                 </button>
               </td>

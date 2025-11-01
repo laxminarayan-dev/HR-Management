@@ -2,3 +2,45 @@
 *:focus {
   outline: none;
 }
+
+@media print {
+  /* Hide everything else */
+  body * {
+    visibility: hidden !important;
+    box-shadow: none !important;
+  }
+
+  /* Show only the print area */
+  .print-area,
+  .print-area * {
+    visibility: visible !important;
+  }
+
+  /* Keep structure, padding, and margin for print */
+  .print-area {
+    position: static !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0mm auto !important; /* add margin for page edge gap */
+    padding: 0mm !important; /* restore padding inside the slip */
+    background: #ffffff !important;
+    box-shadow: none !important;
+    color: #000 !important;
+    border-radius: 12px !important; /* optional – round corners */
+    border: none;
+  }
+
+  /* Ensure colors print properly */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
